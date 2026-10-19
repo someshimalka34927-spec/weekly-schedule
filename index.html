@@ -26,7 +26,7 @@
             z-index: -1;
         }
 
-        /* BMW Logo Floating Animation Container */
+        /* Floating BMW Logos Animation Container */
         .bubbles-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -58,12 +58,44 @@
             }
         }
 
+        /* Start Audio Overlay / Button */
+        .audio-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+            gap: 20px;
+            text-align: center;
+            padding: 20px;
+        }
+        .start-engine-btn {
+            background: linear-gradient(135deg, #0066b1, #00aced);
+            color: white;
+            border: 2px solid #fff;
+            padding: 15px 35px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 172, 237, 0.8);
+            transition: 0.3s;
+        }
+        .start-engine-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #0080ff, #0066b1);
+        }
+
         /* Login Screen Styling */
         .login-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 90vh;
+            display: none;
         }
         .login-box {
             background: rgba(20, 20, 20, 0.92);
@@ -325,10 +357,17 @@
     <!-- Floating BMW Logos Animation Container -->
     <div class="bubbles-container" id="bubblesContainer"></div>
 
-    <!-- Automatic Background Car Engine / Rev Sound -->
-    <audio id="carSound" loop autoplay>
+    <!-- Audio Element -->
+    <audio id="carSound" loop>
         <source src="https://actions.google.com/sounds/v1/transportation/car_rev_1.ogg" type="audio/ogg">
     </audio>
+
+    <!-- Initial Start Engine Screen (Bypasses Browser Autoplay Block) -->
+    <div class="audio-overlay" id="audioOverlay">
+        <h2 style="font-size: 2rem; color: #00aced; margin-bottom: 10px;">BMW Weekly Schedule</h2>
+        <p style="color: #ccc; margin-bottom: 20px;">Click below to start the engine and enter your schedule</p>
+        <button class="start-engine-btn" onclick="startAppWithSound()">Start BMW Engine 🏎️💨</button>
+    </div>
 
     <!-- Login Screen -->
     <div class="login-wrapper" id="loginWrapper">
@@ -410,13 +449,18 @@
         }
         setInterval(createBmwLogo, 600);
 
-        // Force play audio on first user interaction if blocked by browser policy
-        document.addEventListener('click', function() {
+        function startAppWithSound() {
             const audio = document.getElementById('carSound');
-            if (audio.paused) {
-                audio.play().catch(e => console.log(e));
+            audio.play().catch(e => console.log(e));
+            
+            document.getElementById('audioOverlay').style.display = 'none';
+            document.getElementById('loginWrapper').style.display = 'flex';
+            
+            if (currentUser) {
+                loadUserData();
+                showApp();
             }
-        }, { once: true });
+        }
 
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const orderedDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -560,6 +604,7 @@
         }
 
         if (currentUser) {
+            document.getElementById('audioOverlay').style.display = 'none';
             loadUserData();
             showApp();
         }
