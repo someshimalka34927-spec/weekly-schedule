@@ -26,7 +26,7 @@
             z-index: -1;
         }
 
-        /* Bubble Animation Styling */
+        /* BMW Logo Floating Animation Container */
         .bubbles-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -34,24 +34,26 @@
             pointer-events: none;
             overflow: hidden;
         }
-        .bubble {
+        .floating-bmw {
             position: absolute;
-            bottom: -50px;
-            background: rgba(0, 172, 237, 0.25);
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            border-radius: 50%;
+            bottom: -60px;
+            width: 45px;
+            height: 45px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg') no-repeat center center;
+            background-size: contain;
             animation: riseUp linear infinite;
+            filter: drop-shadow(0 0 8px rgba(0, 102, 177, 0.8));
         }
         @keyframes riseUp {
             0% {
-                transform: translateY(0) scale(1);
+                transform: translateY(0) scale(0.8) rotate(0deg);
                 opacity: 0.8;
             }
             50% {
-                opacity: 0.5;
+                opacity: 0.6;
             }
             100% {
-                transform: translateY(-110vh) scale(1.2);
+                transform: translateY(-110vh) scale(1.2) rotate(360deg);
                 opacity: 0;
             }
         }
@@ -71,7 +73,9 @@
             border: 1px solid #fff;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: 0.3s;
         }
+        .sound-widget:hover { background: #0080ff; }
         .sound-widget span {
             font-size: 0.9rem;
             font-weight: bold;
@@ -341,18 +345,18 @@
 <body>
     <div class="overlay"></div>
 
-    <!-- Floating Water Bubbles Animation Container -->
+    <!-- Floating BMW Logos Animation Container -->
     <div class="bubbles-container" id="bubblesContainer"></div>
 
-    <!-- Background Water Falling Sound (Looping) -->
-    <audio id="waterSound" loop>
-        <source src="https://actions.google.com/sounds/v1/water/waterfall_heavy.ogg" type="audio/ogg">
+    <!-- Background BMW Car Engine / Rev Sound (Looping) -->
+    <audio id="carSound" loop>
+        <source src="https://actions.google.com/sounds/v1/transportation/car_rev_1.ogg" type="audio/ogg">
     </audio>
 
-    <!-- Sound Toggle Widget -->
+    <!-- Sound Control Widget -->
     <div class="sound-widget" onclick="toggleSound()">
-        <span id="soundIcon">🔊</span>
-        <span id="soundText">Waterfall Audio: OFF</span>
+        <span id="soundIcon">🏎️</span>
+        <span id="soundText">Car Engine Sound: OFF</span>
     </div>
 
     <!-- Login Screen -->
@@ -413,44 +417,44 @@
     </div>
 
     <script>
-        // Bubble Generator Animation
-        function createBubble() {
+        // Floating BMW Logo Generator Animation
+        function createBmwLogo() {
             const container = document.getElementById('bubblesContainer');
-            const bubble = document.createElement('div');
-            bubble.classList.add('bubble');
+            const logo = document.createElement('div');
+            logo.classList.add('floating-bmw');
             
-            const size = Math.random() * 30 + 10 + 'px';
-            bubble.style.width = size;
-            bubble.style.height = size;
-            bubble.style.left = Math.random() * 100 + 'vw';
+            const size = Math.random() * 25 + 30 + 'px';
+            logo.style.width = size;
+            logo.style.height = size;
+            logo.style.left = Math.random() * 100 + 'vw';
             
-            const duration = Math.random() * 6 + 4 + 's';
-            bubble.style.animationDuration = duration;
+            const duration = Math.random() * 5 + 4 + 's';
+            logo.style.animationDuration = duration;
 
-            container.appendChild(bubble);
+            container.appendChild(logo);
 
             setTimeout(() => {
-                bubble.remove();
+                logo.remove();
             }, parseFloat(duration) * 1000);
         }
-        setInterval(createBubble, 300);
+        setInterval(createBmwLogo, 600);
 
-        // Water Sound Control
+        // Car Sound Control
         let isAudioPlaying = false;
         function toggleSound() {
-            const audio = document.getElementById('waterSound');
+            const audio = document.getElementById('carSound');
             const soundText = document.getElementById('soundText');
             const soundIcon = document.getElementById('soundIcon');
 
             if (isAudioPlaying) {
                 audio.pause();
-                soundText.innerText = "Waterfall Audio: OFF";
-                soundIcon.innerText = "🔇";
+                soundText.innerText = "Car Engine Sound: OFF";
+                soundIcon.innerText = "🏎️";
                 isAudioPlaying = false;
             } else {
                 audio.play().then(() => {
-                    soundText.innerText = "Waterfall Audio: ON";
-                    soundIcon.innerText = "🔊";
+                    soundText.innerText = "Car Engine Sound: ON";
+                    soundIcon.innerText = "🔥";
                     isAudioPlaying = true;
                 }).catch(e => {
                     alert("Click anywhere on the page first to enable audio!");
