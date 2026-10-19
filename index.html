@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weekly Schedule - Login</title>
+    <title>Weekly Schedule</title>
     <style>
         * {
             box-sizing: border-box;
@@ -17,15 +17,67 @@
             color: #fff;
             min-height: 100vh;
             padding: 20px;
+            overflow-x: hidden;
         }
         .overlay {
-            background: rgba(0, 0, 0, 0.82);
+            background: rgba(0, 0, 0, 0.78);
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
         }
 
-        /* Login Container Styling */
+        /* Bubble Animation Styling */
+        .bubbles-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .bubble {
+            position: absolute;
+            bottom: -50px;
+            background: rgba(0, 172, 237, 0.25);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: riseUp linear infinite;
+        }
+        @keyframes riseUp {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-110vh) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Sound Control Widget */
+        .sound-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 102, 177, 0.85);
+            padding: 10px 15px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+            border: 1px solid #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .sound-widget span {
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        /* Login Screen Styling */
         .login-wrapper {
             display: flex;
             justify-content: center;
@@ -45,7 +97,7 @@
         .login-box h2 {
             margin-bottom: 20px;
             color: #00aced;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
         }
         .login-box input {
             width: 100%;
@@ -55,7 +107,7 @@
             border: 1px solid #555;
             background: #222;
             color: #fff;
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
         .login-btn {
             width: 100%;
@@ -64,7 +116,7 @@
             color: white;
             border: none;
             border-radius: 8px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
@@ -88,15 +140,15 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid #0066b1;
-            padding-bottom: 15px;
+            padding-bottom: 12px;
             margin-bottom: 20px;
             flex-wrap: wrap;
             gap: 10px;
         }
         header h1 {
             color: #ffffff;
-            font-size: 1.8rem;
-            letter-spacing: 1px;
+            font-size: 1.4rem;
+            letter-spacing: 0.5px;
         }
         header h1 span {
             color: #0066b1;
@@ -107,9 +159,9 @@
             gap: 10px;
         }
         .clock {
-            font-size: 1rem;
+            font-size: 0.95rem;
             background: rgba(0, 102, 177, 0.25);
-            padding: 8px 15px;
+            padding: 6px 12px;
             border-radius: 20px;
             border: 1px solid #0066b1;
         }
@@ -117,11 +169,11 @@
             background: #dc3545;
             color: white;
             border: none;
-            padding: 8px 15px;
+            padding: 6px 12px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         .logout-btn:hover { background: #c82333; }
 
@@ -129,30 +181,25 @@
         .live-banner {
             background: linear-gradient(135deg, #0066b1, #00aced);
             border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 25px;
+            padding: 18px;
+            margin-bottom: 20px;
             box-shadow: 0 4px 15px rgba(0, 102, 177, 0.4);
             border: 2px solid #fff;
-            animation: pulseGlow 2s infinite alternate;
-        }
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 10px rgba(0, 172, 237, 0.4); }
-            100% { box-shadow: 0 0 25px rgba(0, 172, 237, 0.8); }
         }
         .live-banner h3 {
-            font-size: 1rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 8px;
+            letter-spacing: 1.2px;
+            margin-bottom: 6px;
             color: #ffeb3b;
         }
         .live-task-name {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
         .live-task-time {
-            font-size: 1.1rem;
+            font-size: 1rem;
             opacity: 0.9;
         }
 
@@ -167,10 +214,10 @@
             background: #2a2a2a;
             color: #fff;
             border: 1px solid #444;
-            padding: 10px 18px;
+            padding: 8px 15px;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: bold;
             transition: 0.3s;
             white-space: nowrap;
@@ -182,22 +229,22 @@
         .panel {
             background: rgba(30, 30, 30, 0.7);
             border-radius: 10px;
-            padding: 20px;
+            padding: 18px;
             margin-bottom: 20px;
         }
         .add-task-box {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             flex-wrap: wrap;
         }
         .add-task-box input {
-            padding: 10px;
+            padding: 9px 12px;
             border-radius: 6px;
             border: 1px solid #555;
             background: #222;
             color: #fff;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
         .add-task-box input[type="text"] {
             flex: 2;
@@ -206,10 +253,10 @@
             background: #28a745;
             color: #fff;
             border: none;
-            padding: 10px 20px;
+            padding: 9px 18px;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: bold;
             transition: 0.2s;
         }
@@ -223,10 +270,10 @@
             justify-content: space-between;
             align-items: center;
             background: rgba(45, 45, 45, 0.8);
-            padding: 12px 18px;
+            padding: 10px 15px;
             border-radius: 6px;
-            margin-bottom: 10px;
-            border-left: 5px solid #0066b1;
+            margin-bottom: 8px;
+            border-left: 4px solid #0066b1;
             transition: 0.3s;
             flex-wrap: wrap;
             gap: 10px;
@@ -244,15 +291,15 @@
         .task-info {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
         }
         .task-time {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #00aced;
             font-weight: bold;
         }
         .task-name {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
         }
         .task-actions {
             display: flex;
@@ -260,10 +307,10 @@
         }
         .action-btn {
             border: none;
-            padding: 6px 14px;
+            padding: 5px 12px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: bold;
         }
         .btn-done { background: #28a745; color: white; }
@@ -274,7 +321,7 @@
         .summary-box {
             background: rgba(15, 15, 15, 0.9);
             border-radius: 8px;
-            padding: 15px 20px;
+            padding: 15px;
             display: flex;
             justify-content: space-around;
             text-align: center;
@@ -282,11 +329,11 @@
             gap: 15px;
         }
         .summary-item h3 {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             color: #0066b1;
         }
         .summary-item p {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #ccc;
         }
     </style>
@@ -294,11 +341,25 @@
 <body>
     <div class="overlay"></div>
 
+    <!-- Floating Water Bubbles Animation Container -->
+    <div class="bubbles-container" id="bubblesContainer"></div>
+
+    <!-- Background Water Falling Sound (Looping) -->
+    <audio id="waterSound" loop>
+        <source src="https://actions.google.com/sounds/v1/water/waterfall_heavy.ogg" type="audio/ogg">
+    </audio>
+
+    <!-- Sound Toggle Widget -->
+    <div class="sound-widget" onclick="toggleSound()">
+        <span id="soundIcon">🔊</span>
+        <span id="soundText">Waterfall Audio: OFF</span>
+    </div>
+
     <!-- Login Screen -->
     <div class="login-wrapper" id="loginWrapper">
         <div class="login-box">
             <h2>Weekly Schedule</h2>
-            <p style="margin-bottom: 20px; color: #ccc; font-size: 0.9rem;">Enter your Email or Student ID to access your personal schedule</p>
+            <p style="margin-bottom: 20px; color: #ccc; font-size: 0.9rem;">Enter your Email or Student ID to login</p>
             <input type="text" id="userInput" placeholder="Enter Email or Student ID">
             <button class="login-btn" onclick="handleLogin()">Login / Start</button>
         </div>
@@ -324,7 +385,7 @@
         <div class="days-nav" id="daysNav"></div>
 
         <div class="panel">
-            <h2 id="currentDayTitle" style="margin-bottom: 15px; color: #00aced; font-size: 1.3rem;">Manage Tasks</h2>
+            <h2 id="currentDayTitle" style="margin-bottom: 15px; color: #00aced; font-size: 1.15rem;">Manage Tasks</h2>
             
             <div class="add-task-box">
                 <input type="text" id="newTaskName" placeholder="New Task Name">
@@ -352,6 +413,51 @@
     </div>
 
     <script>
+        // Bubble Generator Animation
+        function createBubble() {
+            const container = document.getElementById('bubblesContainer');
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            
+            const size = Math.random() * 30 + 10 + 'px';
+            bubble.style.width = size;
+            bubble.style.height = size;
+            bubble.style.left = Math.random() * 100 + 'vw';
+            
+            const duration = Math.random() * 6 + 4 + 's';
+            bubble.style.animationDuration = duration;
+
+            container.appendChild(bubble);
+
+            setTimeout(() => {
+                bubble.remove();
+            }, parseFloat(duration) * 1000);
+        }
+        setInterval(createBubble, 300);
+
+        // Water Sound Control
+        let isAudioPlaying = false;
+        function toggleSound() {
+            const audio = document.getElementById('waterSound');
+            const soundText = document.getElementById('soundText');
+            const soundIcon = document.getElementById('soundIcon');
+
+            if (isAudioPlaying) {
+                audio.pause();
+                soundText.innerText = "Waterfall Audio: OFF";
+                soundIcon.innerText = "🔇";
+                isAudioPlaying = false;
+            } else {
+                audio.play().then(() => {
+                    soundText.innerText = "Waterfall Audio: ON";
+                    soundIcon.innerText = "🔊";
+                    isAudioPlaying = true;
+                }).catch(e => {
+                    alert("Click anywhere on the page first to enable audio!");
+                });
+            }
+        }
+
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const orderedDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         
