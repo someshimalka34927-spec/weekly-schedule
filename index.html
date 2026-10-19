@@ -58,29 +58,6 @@
             }
         }
 
-        /* Sound Control Widget */
-        .sound-widget {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0, 102, 177, 0.85);
-            padding: 10px 15px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            z-index: 1000;
-            border: 1px solid #fff;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            transition: 0.3s;
-        }
-        .sound-widget:hover { background: #0080ff; }
-        .sound-widget span {
-            font-size: 0.9rem;
-            font-weight: bold;
-        }
-
         /* Login Screen Styling */
         .login-wrapper {
             display: flex;
@@ -348,16 +325,10 @@
     <!-- Floating BMW Logos Animation Container -->
     <div class="bubbles-container" id="bubblesContainer"></div>
 
-    <!-- Background BMW Car Engine / Rev Sound (Looping) -->
-    <audio id="carSound" loop>
+    <!-- Automatic Background Car Engine / Rev Sound -->
+    <audio id="carSound" loop autoplay>
         <source src="https://actions.google.com/sounds/v1/transportation/car_rev_1.ogg" type="audio/ogg">
     </audio>
-
-    <!-- Sound Control Widget -->
-    <div class="sound-widget" onclick="toggleSound()">
-        <span id="soundIcon">🏎️</span>
-        <span id="soundText">Car Engine Sound: OFF</span>
-    </div>
 
     <!-- Login Screen -->
     <div class="login-wrapper" id="loginWrapper">
@@ -439,28 +410,13 @@
         }
         setInterval(createBmwLogo, 600);
 
-        // Car Sound Control
-        let isAudioPlaying = false;
-        function toggleSound() {
+        // Force play audio on first user interaction if blocked by browser policy
+        document.addEventListener('click', function() {
             const audio = document.getElementById('carSound');
-            const soundText = document.getElementById('soundText');
-            const soundIcon = document.getElementById('soundIcon');
-
-            if (isAudioPlaying) {
-                audio.pause();
-                soundText.innerText = "Car Engine Sound: OFF";
-                soundIcon.innerText = "🏎️";
-                isAudioPlaying = false;
-            } else {
-                audio.play().then(() => {
-                    soundText.innerText = "Car Engine Sound: ON";
-                    soundIcon.innerText = "🔥";
-                    isAudioPlaying = true;
-                }).catch(e => {
-                    alert("Click anywhere on the page first to enable audio!");
-                });
+            if (audio.paused) {
+                audio.play().catch(e => console.log(e));
             }
-        }
+        }, { once: true });
 
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const orderedDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
