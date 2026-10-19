@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Schedule - Login</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+        }
+        body {
+            background: url('https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .overlay {
+            background: rgba(0, 0, 0, 0.82);
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+        }
+
+        /* Login Container Styling */
+        .login-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+        }
+        .login-box {
+            background: rgba(20, 20, 20, 0.92);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+            border: 1px solid rgba(0, 102, 177, 0.5);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-box h2 {
+            margin-bottom: 20px;
+            color: #00aced;
+            font-size: 1.8rem;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #555;
+            background: #222;
+            color: #fff;
+            font-size: 1rem;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #0066b1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .login-btn:hover { background: #0080ff; }
+
+        /* App Container Styling */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(20, 20, 20, 0.88);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: none;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #0066b1;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        header h1 {
+            color: #ffffff;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+        header h1 span {
+            color: #0066b1;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .clock {
+            font-size: 1rem;
+            background: rgba(0, 102, 177, 0.25);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid #0066b1;
+        }
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .logout-btn:hover { background: #c82333; }
+
+        /* Live Current Task Banner */
+        .live-banner {
+            background: linear-gradient(135deg, #0066b1, #00aced);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 102, 177, 0.4);
+            border: 2px solid #fff;
+            animation: pulseGlow 2s infinite alternate;
+        }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 10px rgba(0, 172, 237, 0.4); }
+            100% { box-shadow: 0 0 25px rgba(0, 172, 237, 0.8); }
+        }
+        .live-banner h3 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            color: #ffeb3b;
+        }
+        .live-task-name {
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .live-task-time {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .days-nav {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+            padding-bottom: 5px;
+        }
+        .day-btn {
+            background: #2a2a2a;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+        .day-btn:hover, .day-btn.active {
+            background: #0066b1;
+            border-color: #00aced;
+        }
+        .panel {
+            background: rgba(30, 30, 30, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .add-task-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .add-task-box input {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #555;
+            background: #222;
+            color: #fff;
+            font-size: 0.95rem;
+        }
+        .add-task-box input[type="text"] {
+            flex: 2;
+        }
+        .add-btn {
+            background: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .add-btn:hover { background: #218838; }
+        
+        .task-list {
+            list-style: none;
+        }
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(45, 45, 45, 0.8);
+            padding: 12px 18px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border-left: 5px solid #0066b1;
+            transition: 0.3s;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .task-item.active-highlight {
+            border-left-color: #ffeb3b;
+            background: rgba(0, 102, 177, 0.3);
+            border: 1px solid #00aced;
+        }
+        .task-item.done {
+            border-left-color: #28a745;
+            opacity: 0.55;
+            text-decoration: line-through;
+        }
+        .task-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .task-time {
+            font-size: 0.95rem;
+            color: #00aced;
+            font-weight: bold;
+        }
+        .task-name {
+            font-size: 1.1rem;
+        }
+        .task-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .action-btn {
+            border: none;
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        .btn-done { background: #28a745; color: white; }
+        .btn-done:hover { background: #218838; }
+        .btn-delete { background: #dc3545; color: white; }
+        .btn-delete:hover { background: #c82333; }
+
+        .summary-box {
+            background: rgba(15, 15, 15, 0.9);
+            border-radius: 8px;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .summary-item h3 {
+            font-size: 1.6rem;
+            color: #0066b1;
+        }
+        .summary-item p {
+            font-size: 0.95rem;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+
+    <!-- Login Screen -->
+    <div class="login-wrapper" id="loginWrapper">
+        <div class="login-box">
+            <h2>Weekly Schedule</h2>
+            <p style="margin-bottom: 20px; color: #ccc; font-size: 0.9rem;">Enter your Email or Student ID to access your personal schedule</p>
+            <input type="text" id="userInput" placeholder="Enter Email or Student ID">
+            <button class="login-btn" onclick="handleLogin()">Login / Start</button>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div class="container" id="appContainer">
+        <header>
+            <h1>Weekly <span>Schedule</span></h1>
+            <div class="header-right">
+                <div class="clock" id="liveClock">Loading time...</div>
+                <button class="logout-btn" onclick="handleLogout()">Logout</button>
+            </div>
+        </header>
+
+        <!-- Live Current Task Banner -->
+        <div class="live-banner" id="liveBanner">
+            <h3>⚡ Live Now (Active Task)</h3>
+            <div class="live-task-name" id="liveTaskName">Checking schedule...</div>
+            <div class="live-task-time" id="liveTaskTime">--:--</div>
+        </div>
+
+        <div class="days-nav" id="daysNav"></div>
+
+        <div class="panel">
+            <h2 id="currentDayTitle" style="margin-bottom: 15px; color: #00aced; font-size: 1.3rem;">Manage Tasks</h2>
+            
+            <div class="add-task-box">
+                <input type="text" id="newTaskName" placeholder="New Task Name">
+                <input type="text" id="newTaskTime" placeholder="Time Range (e.g., 06:00 - 14:00)">
+                <button class="add-btn" onclick="addNewTask()">Add Task</button>
+            </div>
+
+            <ul class="task-list" id="taskList"></ul>
+        </div>
+
+        <div class="summary-box">
+            <div class="summary-item">
+                <h3 id="totalTasks">0</h3>
+                <p>Total Tasks</p>
+            </div>
+            <div class="summary-item">
+                <h3 id="completedTasks" style="color: #28a745;">0</h3>
+                <p>Completed (Done)</p>
+            </div>
+            <div class="summary-item">
+                <h3 id="pendingTasks" style="color: #dc3545;">0</h3>
+                <p>Pending (Not Done)</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const orderedDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        
+        let currentUser = localStorage.getItem('bmw_current_user') || null;
+        let activeDay = days[new Date().getDay()] === 'Sunday' ? 'Sunday' : orderedDays[(new Date().getDay() + 6) % 7];
+        let timetableData = {};
+
+        const defaultSchedule = {
+            'Monday': [
+                { id: 1, time: '06:00 - 14:00', name: 'School', done: false },
+                { id: 2, time: '15:30 - 17:00', name: 'ATC Weekly Review', done: false },
+                { id: 3, time: '18:30 - 19:00', name: 'Dinner', done: false },
+                { id: 4, time: '19:00 - 22:00', name: 'Advanced Theory Chemistry', done: false },
+                { id: 5, time: '22:00 - 22:30', name: 'Note Revise', done: false },
+                { id: 6, time: '22:30 - 23:30', name: 'Revise Physics For the Paper', done: false },
+                { id: 7, time: '23:30 - 00:00', name: 'Social Media', done: false },
+                { id: 8, time: '00:00 - 00:30', name: 'Work Out Time', done: false },
+                { id: 9, time: '00:30 - 01:30', name: 'Morning Sum and Discussion', done: false }
+            ],
+            'Tuesday': [
+                { id: 1, time: '06:00 - 14:00', name: 'School', done: false },
+                { id: 2, time: '14:00 - 17:00', name: 'Physics Paper Class', done: false },
+                { id: 3, time: '17:30 - 18:30', name: 'Social Media', done: false },
+                { id: 4, time: '18:30 - 19:00', name: 'Dinner', done: false },
+                { id: 5, time: '19:00 - 22:00', name: 'Ruwan Sir CM REC', done: false },
+                { id: 6, time: '22:00 - 22:30', name: 'Note Revise', done: false },
+                { id: 7, time: '22:30 - 23:30', name: 'From Last Week', done: false },
+                { id: 8, time: '23:30 - 00:00', name: 'Work Out Time', done: false },
+                { id: 9, time: '00:30 - 01:30', name: 'Morning Sum and Discussion', done: false }
+            ],
+            'Wednesday': [
+                { id: 1, time: '06:00 - 14:00', name: 'School', done: false },
+                { id: 2, time: '16:30 - 17:00', name: 'Social Media', done: false },
+                { id: 3, time: '17:00 - 18:00', name: 'Revise Chemistry For the Paper', done: false },
+                { id: 4, time: '18:00 - 18:30', name: 'Dinner', done: false },
+                { id: 5, time: '18:30 - 20:30', name: 'Physics Homework', done: false },
+                { id: 6, time: '20:30 - 22:00', name: 'Study Chemistry', done: false },
+                { id: 7, time: '22:00 - 23:00', name: 'Monthly Review', done: false },
+                { id: 8, time: '23:00 - 23:30', name: 'Social Media', done: false },
+                { id: 9, time: '23:30 - 00:00', name: 'Work Out Time', done: false },
+                { id: 10, time: '00:30 - 01:30', name: 'Morning Sum and Discussion', done: false }
+            ],
+            'Thursday': [
+                { id: 1, time: '06:00 - 14:00', name: 'School', done: false },
+                { id: 2, time: '14:30 - 17:00', name: 'Anuradha Sir Physics Class', done: false },
+                { id: 3, time: '18:30 - 19:00', name: 'Note Revise', done: false },
+                { id: 4, time: '19:00 - 19:30', name: 'Dinner', done: false },
+                { id: 5, time: '19:30 - 21:30', name: 'Anuradha Sir Reverse Class', done: false },
+                { id: 6, time: '21:30 - 22:00', name: 'Note Revise', done: false },
+                { id: 7, time: '22:00 - 22:30', name: 'Social Media', done: false },
+                { id: 8, time: '22:30 - 23:30', name: 'Past Paper MCQ Reviews', done: false },
+                { id: 9, time: '23:30 - 00:00', name: 'Work Out Time', done: false },
+                { id: 10, time: '00:30 - 01:30', name: 'Morning Sum and Discussion', done: false }
+            ],
+            'Friday': [
+                { id: 1, time: '06:00 - 14:00', name: 'School', done: false },
+                { id: 2, time: '14:00 - 17:00', name: 'Chemistry Paper Class', done: false },
+                { id: 3, time: '19:00 - 19:30', name: 'Dinner', done: false },
+                { id: 4, time: '19:30 - 20:30', name: 'ATC Weekly Review', done: false },
+                { id: 5, time: '20:30 - 21:00', name: 'Social Media', done: false },
+                { id: 6, time: '21:00 - 22:00', name: 'Ajantha Sir Homework', done: false },
+                { id: 7, time: '22:30 - 23:30', name: 'Chemistry Homework', done: false },
+                { id: 8, time: '23:30 - 00:00', name: 'Work Out Time', done: false },
+                { id: 9, time: '00:30 - 01:30', name: 'Morning Sum and Discussion', done: false }
+            ],
+            'Saturday': [
+                { id: 1, time: '06:00 - 07:30', name: 'Physics Past Paper MCQ', done: false },
+                { id: 2, time: '07:30 - 12:00', name: 'Ajantha Sir CM Live Class', done: false },
+                { id: 3, time: '12:00 - 13:00', name: 'Note Revise & Social Media', done: false },
+                { id: 4, time: '14:00 - 17:30', name: 'Physics Homework Discussion & Anuradha Sir 2027 Physics', done: false },
+                { id: 5, time: '17:30 - 18:00', name: 'Note Revise', done: false },
+                { id: 6, time: '18:00 - 18:30', name: 'Dinner', done: false },
+                { id: 7, time: '18:30 - 21:00', name: 'Chemistry Paper Discussion', done: false },
+                { id: 8, time: '21:00 - 22:00', name: 'Daily Dose & Daily Recap', done: false },
+                { id: 9, time: '22:00 - 23:00', name: 'E Test - School', done: false },
+                { id: 10, time: '23:30 - 00:30', name: 'Work Out Time', done: false },
+                { id: 11, time: '00:30 - 01:30', name: 'ATC Weekly Review', done: false }
+            ],
+            'Sunday': [
+                { id: 1, time: '06:00 - 08:30', name: 'Physics Homework 2027', done: false },
+                { id: 2, time: '08:30 - 10:00', name: 'Physics Homework Discussion 2027', done: false },
+                { id: 3, time: '10:00 - 13:00', name: 'Physics Paper Discussion', done: false },
+                { id: 4, time: '13:00 - 17:00', name: 'Amila Sir Chemistry Live Class', done: false },
+                { id: 5, time: '17:00 - 18:00', name: 'Note Revise & Social Media', done: false },
+                { id: 6, time: '18:30 - 19:00', name: 'Dinner', done: false },
+                { id: 7, time: '19:00 - 22:00', name: 'Anuradha Sir Physics Class', done: false },
+                { id: 8, time: '22:00 - 23:00', name: 'Note Revise & Social Media', done: false },
+                { id: 9, time: '23:00 - 00:00', name: 'Work Out Time', done: false },
+                { id: 10, time: '00:00 - 00:30', name: 'Weekly Review', done: false }
+            ]
+        };
+
+        function handleLogin() {
+            const val = document.getElementById('userInput').value.trim();
+            if (!val) {
+                alert('Please enter your Email or Student ID!');
+                return;
+            }
+            currentUser = val;
+            localStorage.setItem('bmw_current_user', currentUser);
+            loadUserData();
+            showApp();
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('bmw_current_user');
+            currentUser = null;
+            document.getElementById('appContainer').style.display = 'none';
+            document.getElementById('loginWrapper').style.display = 'flex';
+            document.getElementById('userInput').value = '';
+        }
+
+        function loadUserData() {
+            const savedData = localStorage.getItem(`bmw_schedule_${currentUser}`);
+            if (savedData) {
+                timetableData = JSON.parse(savedData);
+            } else {
+                timetableData = JSON.parse(JSON.stringify(defaultSchedule));
+                saveUserData();
+            }
+        }
+
+        function saveUserData() {
+            if (currentUser) {
+                localStorage.setItem(`bmw_schedule_${currentUser}`, JSON.stringify(timetableData));
+            }
+        }
+
+        function showApp() {
+            document.getElementById('loginWrapper').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
+            initApp();
+        }
+
+        function initApp() {
+            renderDaysNav();
+            renderTasks();
+            setInterval(updateClockAndLiveTask, 1000);
+            updateClockAndLiveTask();
+        }
+
+        if (currentUser) {
+            loadUserData();
+            showApp();
+        }
+
+        function updateClockAndLiveTask() {
+            const now = new Date();
+            document.getElementById('liveClock').innerText = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+
+            const currentDayName = orderedDays[(now.getDay() + 6) % 7];
+            const currentTimeMinutes = now.getHours() * 60 + now.getMinutes();
+
+            const todaysTasks = timetableData[currentDayName] || [];
+            let activeTaskFound = null;
+
+            todaysTasks.forEach(task => {
+                const parts = task.time.split('-');
+                if (parts.length === 2) {
+                    const startParts = parts[0].trim().split(':');
+                    const endParts = parts[1].trim().split(':');
+                    if (startParts.length === 2 && endParts.length === 2) {
+                        let startMin = parseInt(startParts[0]) * 60 + parseInt(startParts[1]);
+                        let endMin = parseInt(endParts[0]) * 60 + parseInt(endParts[1]);
+                        if (endMin <= startMin) endMin += 24 * 60;
+
+                        if (currentTimeMinutes >= startMin && currentTimeMinutes <= endMin) {
+                            activeTaskFound = task;
+                        }
+                    }
+                }
+            });
+
+            const bannerName = document.getElementById('liveTaskName');
+            const bannerTime = document.getElementById('liveTaskTime');
+
+            if (activeTaskFound) {
+                bannerName.innerText = activeTaskFound.name;
+                bannerTime.innerText = `Scheduled Time: ${activeTaskFound.time} (${currentDayName})`;
+            } else {
+                bannerName.innerText = "No active task right now (Free Time / Relax)";
+                bannerTime.innerText = `Current Day: ${currentDayName}`;
+            }
+        }
+
+        function renderDaysNav() {
+            const nav = document.getElementById('daysNav');
+            nav.innerHTML = '';
+            orderedDays.forEach(day => {
+                const btn = document.createElement('button');
+                btn.className = `day-btn ${day === activeDay ? 'active' : ''}`;
+                btn.innerText = day;
+                btn.onclick = () => {
+                    activeDay = day;
+                    renderDaysNav();
+                    renderTasks();
+                };
+                nav.appendChild(btn);
+            });
+        }
+
+        function renderTasks() {
+            document.getElementById('currentDayTitle').innerText = `${activeDay}'s Schedule`;
+            const list = document.getElementById('taskList');
+            list.innerHTML = '';
+
+            const tasks = timetableData[activeDay] || [];
+            let completedCount = 0;
+            const now = new Date();
+            const currentDayName = orderedDays[(now.getDay() + 6) % 7];
+            const currentTimeMinutes = now.getHours() * 60 + now.getMinutes();
+
+            tasks.forEach((task, index) => {
+                if (task.done) completedCount++;
+
+                let isCurrentActive = false;
+                if (activeDay === currentDayName) {
+                    const parts = task.time.split('-');
+                    if (parts.length === 2) {
+                        const startParts = parts[0].trim().split(':');
+                        const endParts = parts[1].trim().split(':');
+                        if (startParts.length === 2 && endParts.length === 2) {
+                            let startMin = parseInt(startParts[0]) * 60 + parseInt(startParts[1]);
+                            let endMin = parseInt(endParts[0]) * 60 + parseInt(endParts[1]);
+                            if (endMin <= startMin) endMin += 24 * 60;
+                            if (currentTimeMinutes >= startMin && currentTimeMinutes <= endMin) {
+                                isCurrentActive = true;
+                            }
+                        }
+                    }
+                }
+
+                const li = document.createElement('li');
+                li.className = `task-item ${task.done ? 'done' : ''} ${isCurrentActive ? 'active-highlight' : ''}`;
+                li.innerHTML = `
+                    <div class="task-info">
+                        <span class="task-time">${task.time} ${isCurrentActive ? ' ⭐ [LIVE NOW]' : ''}</span>
+                        <span class="task-name">${task.name}</span>
+                    </div>
+                    <div class="task-actions">
+                        <button class="action-btn btn-done" onclick="toggleTask(${index})">${task.done ? 'Undo' : 'Done'}</button>
+                        <button class="action-btn btn-delete" onclick="deleteTask(${index})">Delete</button>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
+
+            document.getElementById('totalTasks').innerText = tasks.length;
+            document.getElementById('completedTasks').innerText = completedCount;
+            document.getElementById('pendingTasks').innerText = tasks.length - completedCount;
+
+            saveUserData();
+        }
+
+        function toggleTask(index) {
+            timetableData[activeDay][index].done = !timetableData[activeDay][index].done;
+            renderTasks();
+        }
+
+        function deleteTask(index) {
+            timetableData[activeDay].splice(index, 1);
+            renderTasks();
+        }
+
+        function addNewTask() {
+            const nameInput = document.getElementById('newTaskName');
+            const timeInput = document.getElementById('newTaskTime');
+
+            if (!nameInput.value.trim()) {
+                alert('Please enter a task name!');
+                return;
+            }
+
+            const newTask = {
+                id: Date.now(),
+                name: nameInput.value.trim(),
+                time: timeInput.value.trim() || 'Anytime',
+                done: false
+            };
+
+            timetableData[activeDay].push(newTask);
+            nameInput.value = '';
+            timeInput.value = '';
+            renderTasks();
+        }
+    </script>
+</body>
+</html>
