@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weekly Schedule</title>
+    <title>BMW Ultimate Weekly Schedule</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
         body {
             background: url('https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed;
@@ -20,7 +21,7 @@
             overflow-x: hidden;
         }
         .overlay {
-            background: rgba(0, 0, 0, 0.78);
+            background: rgba(5, 5, 5, 0.85);
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
@@ -42,16 +43,14 @@
             background: url('https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg') no-repeat center center;
             background-size: contain;
             animation: riseUp linear infinite;
-            filter: drop-shadow(0 0 8px rgba(0, 102, 177, 0.8));
+            filter: drop-shadow(0 0 10px rgba(0, 162, 232, 0.9));
         }
         @keyframes riseUp {
             0% {
                 transform: translateY(0) scale(0.8) rotate(0deg);
                 opacity: 0.8;
             }
-            50% {
-                opacity: 0.6;
-            }
+            50% { opacity: 0.6; }
             100% {
                 transform: translateY(-110vh) scale(1.2) rotate(360deg);
                 opacity: 0;
@@ -62,7 +61,7 @@
         .audio-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.9);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -72,21 +71,30 @@
             text-align: center;
             padding: 20px;
         }
+        .audio-overlay h2 {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 2.2rem;
+            color: #00aced;
+            text-shadow: 0 0 15px rgba(0, 172, 237, 0.6);
+        }
         .start-engine-btn {
             background: linear-gradient(135deg, #0066b1, #00aced);
             color: white;
             border: 2px solid #fff;
-            padding: 15px 35px;
+            padding: 16px 40px;
             font-size: 1.3rem;
-            font-weight: bold;
-            border-radius: 30px;
+            font-weight: 700;
+            border-radius: 35px;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(0, 172, 237, 0.8);
+            box-shadow: 0 0 25px rgba(0, 172, 237, 0.8);
             transition: 0.3s;
         }
         .start-engine-btn:hover {
-            transform: scale(1.05);
+            transform: scale(1.08);
             background: linear-gradient(135deg, #0080ff, #0066b1);
+            box-shadow: 0 0 35px rgba(0, 172, 237, 1);
         }
 
         /* Login Screen Styling */
@@ -98,53 +106,62 @@
             display: none;
         }
         .login-box {
-            background: rgba(20, 20, 20, 0.92);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-            border: 1px solid rgba(0, 102, 177, 0.5);
+            background: rgba(15, 15, 15, 0.95);
+            padding: 45px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            border: 1px solid rgba(0, 172, 237, 0.4);
             text-align: center;
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
         }
         .login-box h2 {
-            margin-bottom: 20px;
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 10px;
             color: #00aced;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
         }
         .login-box input {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            border: 1px solid #555;
-            background: #222;
+            padding: 14px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: 1px solid #444;
+            background: #1e1e1e;
             color: #fff;
-            font-size: 0.95rem;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        .login-box input:focus {
+            border-color: #00aced;
+            box-shadow: 0 0 10px rgba(0, 172, 237, 0.4);
         }
         .login-btn {
             width: 100%;
-            padding: 12px;
-            background: #0066b1;
+            padding: 14px;
+            background: linear-gradient(135deg, #0066b1, #00aced);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
             cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 102, 177, 0.6);
             transition: 0.3s;
         }
-        .login-btn:hover { background: #0080ff; }
+        .login-btn:hover { background: linear-gradient(135deg, #0080ff, #0066b1); }
 
         /* App Container Styling */
         .container {
-            max-width: 1000px;
+            max-width: 1050px;
             margin: 0 auto;
-            background: rgba(20, 20, 20, 0.88);
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
+            background: rgba(18, 18, 18, 0.9);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.15);
             display: none;
         }
@@ -153,148 +170,232 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid #0066b1;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
         }
         header h1 {
+            font-family: 'Orbitron', sans-serif;
             color: #ffffff;
-            font-size: 1.4rem;
-            letter-spacing: 0.5px;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
         header h1 span {
-            color: #0066b1;
+            color: #00aced;
+            text-shadow: 0 0 10px rgba(0, 172, 237, 0.6);
         }
         .header-right {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
         .clock {
+            font-family: 'Orbitron', sans-serif;
             font-size: 0.95rem;
-            background: rgba(0, 102, 177, 0.25);
-            padding: 6px 12px;
+            background: rgba(0, 102, 177, 0.3);
+            padding: 8px 16px;
             border-radius: 20px;
-            border: 1px solid #0066b1;
+            border: 1px solid #00aced;
+            box-shadow: inset 0 0 10px rgba(0, 172, 237, 0.2);
         }
         .logout-btn {
             background: #dc3545;
             color: white;
             border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 8px 16px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 0.85rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: 0.3s;
         }
-        .logout-btn:hover { background: #c82333; }
+        .logout-btn:hover { background: #c82333; box-shadow: 0 0 10px rgba(220, 53, 69, 0.6); }
 
-        /* Live Current Task Banner */
+        /* Live Current Task Banner with Elapsed Timer */
         .live-banner {
-            background: linear-gradient(135deg, #0066b1, #00aced);
-            border-radius: 10px;
-            padding: 18px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0, 102, 177, 0.4);
+            background: linear-gradient(135deg, #004d80, #0066b1, #00aced);
+            background-size: 200% 200%;
+            animation: gradientMove 6s ease infinite;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 6px 20px rgba(0, 102, 177, 0.5);
             border: 2px solid #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         .live-banner h3 {
-            font-size: 0.9rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
-            margin-bottom: 6px;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
             color: #ffeb3b;
+            text-shadow: 0 0 8px rgba(255, 235, 59, 0.6);
         }
         .live-task-name {
-            font-size: 1.4rem;
-            font-weight: bold;
-            margin-bottom: 4px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
         }
-        .live-task-time {
+        .live-task-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
             font-size: 1rem;
-            opacity: 0.9;
+            opacity: 0.95;
+        }
+        .elapsed-badge {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Progress Bar Section */
+        .progress-section {
+            background: rgba(25, 25, 25, 0.8);
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(0, 172, 237, 0.3);
+        }
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        .progress-info span:last-child {
+            font-family: 'Orbitron', sans-serif;
+            color: #00aced;
+        }
+        .progress-bar-container {
+            width: 100%;
+            height: 14px;
+            background: #2a2a2a;
+            border-radius: 7px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #28a745, #00aced);
+            border-radius: 7px;
+            transition: width 0.5s ease-in-out;
+            box-shadow: 0 0 10px rgba(40, 167, 69, 0.8);
         }
 
         .days-nav {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             overflow-x: auto;
-            margin-bottom: 20px;
-            padding-bottom: 5px;
+            margin-bottom: 25px;
+            padding-bottom: 8px;
         }
         .day-btn {
-            background: #2a2a2a;
+            background: #222;
             color: #fff;
             border: 1px solid #444;
-            padding: 8px 15px;
-            border-radius: 6px;
+            padding: 10px 18px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: bold;
+            font-size: 1rem;
+            font-weight: 600;
             transition: 0.3s;
             white-space: nowrap;
         }
         .day-btn:hover, .day-btn.active {
             background: #0066b1;
             border-color: #00aced;
+            box-shadow: 0 0 12px rgba(0, 172, 237, 0.6);
         }
         .panel {
-            background: rgba(30, 30, 30, 0.7);
-            border-radius: 10px;
-            padding: 18px;
-            margin-bottom: 20px;
+            background: rgba(25, 25, 25, 0.75);
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .panel h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00aced;
+            font-size: 1.3rem;
+            letter-spacing: 0.5px;
         }
         .add-task-box {
             display: flex;
-            gap: 10px;
-            margin-bottom: 18px;
+            gap: 12px;
+            margin-top: 15px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
         .add-task-box input {
-            padding: 9px 12px;
-            border-radius: 6px;
+            padding: 12px 15px;
+            border-radius: 8px;
             border: 1px solid #555;
-            background: #222;
+            background: #1c1c1c;
             color: #fff;
-            font-size: 0.9rem;
+            font-size: 0.95px;
+            outline: none;
+            transition: 0.3s;
         }
-        .add-task-box input[type="text"] {
-            flex: 2;
-        }
+        .add-task-box input:focus { border-color: #00aced; }
+        .add-task-box input[type="text"] { flex: 2; }
         .add-btn {
             background: #28a745;
             color: #fff;
             border: none;
-            padding: 9px 18px;
-            border-radius: 6px;
+            padding: 12px 22px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: bold;
-            transition: 0.2s;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: 0.3s;
         }
-        .add-btn:hover { background: #218838; }
+        .add-btn:hover { background: #218838; box-shadow: 0 0 12px rgba(40, 167, 69, 0.6); }
         
         .task-list {
             list-style: none;
+            max-height: 480px;
+            overflow-y: auto;
+            padding-right: 5px;
         }
+        .task-list::-webkit-scrollbar { width: 6px; }
+        .task-list::-webkit-scrollbar-thumb { background: #0066b1; border-radius: 3px; }
+
         .task-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(45, 45, 45, 0.8);
-            padding: 10px 15px;
-            border-radius: 6px;
-            margin-bottom: 8px;
-            border-left: 4px solid #0066b1;
+            background: rgba(40, 40, 40, 0.85);
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 5px solid #0066b1;
             transition: 0.3s;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
         }
         .task-item.active-highlight {
             border-left-color: #ffeb3b;
-            background: rgba(0, 102, 177, 0.3);
+            background: rgba(0, 102, 177, 0.35);
             border: 1px solid #00aced;
+            box-shadow: 0 0 15px rgba(0, 172, 237, 0.3);
         }
         .task-item.done {
             border-left-color: #28a745;
@@ -304,27 +405,30 @@
         .task-info {
             display: flex;
             flex-direction: column;
-            gap: 3px;
+            gap: 4px;
         }
         .task-time {
+            font-family: 'Orbitron', sans-serif;
             font-size: 0.9rem;
             color: #00aced;
-            font-weight: bold;
+            font-weight: 700;
         }
         .task-name {
-            font-size: 1.05rem;
+            font-size: 1.15rem;
+            font-weight: 500;
         }
         .task-actions {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
         .action-btn {
             border: none;
-            padding: 5px 12px;
-            border-radius: 4px;
+            padding: 7px 14px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 0.85rem;
-            font-weight: bold;
+            font-weight: 700;
+            transition: 0.3s;
         }
         .btn-done { background: #28a745; color: white; }
         .btn-done:hover { background: #218838; }
@@ -332,22 +436,25 @@
         .btn-delete:hover { background: #c82333; }
 
         .summary-box {
-            background: rgba(15, 15, 15, 0.9);
-            border-radius: 8px;
-            padding: 15px;
+            background: rgba(12, 12, 12, 0.95);
+            border-radius: 12px;
+            padding: 20px;
             display: flex;
             justify-content: space-around;
             text-align: center;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 20px;
+            border: 1px solid rgba(0, 172, 237, 0.2);
         }
         .summary-item h3 {
-            font-size: 1.4rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6rem;
             color: #0066b1;
         }
         .summary-item p {
             font-size: 0.9rem;
             color: #ccc;
+            margin-top: 4px;
         }
     </style>
 </head>
@@ -362,19 +469,19 @@
         <source src="https://actions.google.com/sounds/v1/transportation/car_rev_1.ogg" type="audio/ogg">
     </audio>
 
-    <!-- Initial Start Engine Screen (Bypasses Browser Autoplay Block) -->
+    <!-- Initial Start Engine Screen -->
     <div class="audio-overlay" id="audioOverlay">
-        <h2 style="font-size: 2rem; color: #00aced; margin-bottom: 10px;">BMW Weekly Schedule</h2>
-        <p style="color: #ccc; margin-bottom: 20px;">Click below to start the engine and enter your schedule</p>
+        <h2>BMW Ultimate Weekly Schedule</h2>
+        <p style="color: #ccc; font-size: 1.1rem; max-width: 500px;">Click below to start the engine, rev up your workflow, and enter your schedule dashboard.</p>
         <button class="start-engine-btn" onclick="startAppWithSound()">Start BMW Engine 🏎️💨</button>
     </div>
 
     <!-- Login Screen -->
     <div class="login-wrapper" id="loginWrapper">
         <div class="login-box">
-            <h2>Weekly Schedule</h2>
-            <p style="margin-bottom: 20px; color: #ccc; font-size: 0.9rem;">Enter your Email or Student ID to login</p>
-            <input type="text" id="userInput" placeholder="Enter Email or Student ID">
+            <h2>Driver Login</h2>
+            <p style="margin-bottom: 20px; color: #aaa; font-size: 0.9rem;">Enter your Email or Student ID & press Enter</p>
+            <input type="text" id="userInput" placeholder="Enter Email or Student ID" onkeypress="handleLoginKeyPress(event)">
             <button class="login-btn" onclick="handleLogin()">Login / Start</button>
         </div>
     </div>
@@ -382,7 +489,7 @@
     <!-- Main App Container -->
     <div class="container" id="appContainer">
         <header>
-            <h1>Weekly <span>Schedule</span></h1>
+            <h1>BMW <span>Weekly Schedule</span></h1>
             <div class="header-right">
                 <div class="clock" id="liveClock">Loading time...</div>
                 <button class="logout-btn" onclick="handleLogout()">Logout</button>
@@ -393,13 +500,27 @@
         <div class="live-banner" id="liveBanner">
             <h3>⚡ Live Now (Active Task)</h3>
             <div class="live-task-name" id="liveTaskName">Checking schedule...</div>
-            <div class="live-task-time" id="liveTaskTime">--:--</div>
+            <div class="live-task-meta">
+                <span id="liveTaskTime">Scheduled Time: --:--</span>
+                <span class="elapsed-badge" id="elapsedTimeBadge">Elapsed: --</span>
+            </div>
+        </div>
+
+        <!-- Progress Bar Section -->
+        <div class="progress-section">
+            <div class="progress-info">
+                <span>Daily Task Completion Progress</span>
+                <span id="progressPercentage">0%</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progressBarFill"></div>
+            </div>
         </div>
 
         <div class="days-nav" id="daysNav"></div>
 
         <div class="panel">
-            <h2 id="currentDayTitle" style="margin-bottom: 15px; color: #00aced; font-size: 1.15rem;">Manage Tasks</h2>
+            <h2 id="currentDayTitle">Manage Tasks</h2>
             
             <div class="add-task-box">
                 <input type="text" id="newTaskName" placeholder="New Task Name">
@@ -430,6 +551,7 @@
         // Floating BMW Logo Generator Animation
         function createBmwLogo() {
             const container = document.getElementById('bubblesContainer');
+            if(!container) return;
             const logo = document.createElement('div');
             logo.classList.add('floating-bmw');
             
@@ -438,7 +560,7 @@
             logo.style.height = size;
             logo.style.left = Math.random() * 100 + 'vw';
             
-            const duration = Math.random() * 5 + 4 + 's';
+            const duration = Math.random() * 5 + 5 + 's';
             logo.style.animationDuration = duration;
 
             container.appendChild(logo);
@@ -447,7 +569,7 @@
                 logo.remove();
             }, parseFloat(duration) * 1000);
         }
-        setInterval(createBmwLogo, 600);
+        setInterval(createBmwLogo, 700);
 
         function startAppWithSound() {
             const audio = document.getElementById('carSound');
@@ -455,6 +577,7 @@
             
             document.getElementById('audioOverlay').style.display = 'none';
             document.getElementById('loginWrapper').style.display = 'flex';
+            document.getElementById('userInput').focus();
             
             if (currentUser) {
                 loadUserData();
@@ -462,97 +585,113 @@
             }
         }
 
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const orderedDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         
         let currentUser = localStorage.getItem('bmw_current_user') || null;
-        let activeDay = days[new Date().getDay()] === 'Sunday' ? 'Sunday' : orderedDays[(new Date().getDay() + 6) % 7];
+        let activeDay = orderedDays[(new Date().getDay() + 6) % 7];
         let timetableData = {};
 
+        // Updated Default Schedule directly mapped from the Excel sheet (00:00 - 24:00)
         const defaultSchedule = {
             'Monday': [
-                { id: 1, time: '06:00 - 14:00', name: 'School', done: false },
-                { id: 2, time: '15:30 - 17:00', name: 'ATC Weekly Review', done: false },
-                { id: 3, time: '18:30 - 19:00', name: 'Dinner', done: false },
-                { id: 4, time: '19:00 - 22:00', name: 'Advanced Theory Chemistry', done: false },
-                { id: 5, time: '22:00 - 22:30', name: 'Note Revise', done: false },
-                { id: 6, time: '22:30 - 23:30', name: 'Revise Physics For the Paper', done: false },
-                { id: 7, time: '23:30 - 00:00', name: 'Social Media', done: false },
-                { id: 8, time: '00:00 - 00:30', name: 'Work Out Time', done: false },
-                { id: 9, time: '00:30 - 01:30', name: 'Morning Sum and Discussion', done: false }
+                { id: 1, time: '00:00 - 00:30', name: 'Weekly Review', done: false },
+                { id: 2, time: '06:00 - 14:00', name: 'School', done: false },
+                { id: 3, time: '15:30 - 17:00', name: 'ATC Weekly Review', done: false },
+                { id: 4, time: '18:30 - 19:00', name: 'Dinner', done: false },
+                { id: 5, time: '19:00 - 22:00', name: 'Advanced Theory Chemistry', done: false },
+                { id: 6, time: '22:00 - 22:30', name: 'Note Revise', done: false },
+                { id: 7, time: '22:30 - 23:30', name: 'Revise Physics For the Paper', done: false },
+                { id: 8, time: '23:30 - 24:00', name: 'Social Media', done: false }
             ],
             'Tuesday': [
-                { id: 1, time: '06:00 - 14:00', name: 'School', done: false },
-                { id: 2, time: '14:00 - 17:00', name: 'Physics Paper Class', done: false },
-                { id: 3, time: '17:30 - 18:30', name: 'Social Media', done: false },
-                { id: 4, time: '18:30 - 19:00', name: 'Dinner', done: false },
-                { id: 5, time: '19:00 - 22:00', name: 'Ruwan Sir CM REC', done: false },
-                { id: 6, time: '22:00 - 22:30', name: 'Note Revise', done: false },
-                { id: 7, time: '22:30 - 23:30', name: 'From Last Week', done: false },
-                { id: 8, time: '23:30 - 00:00', name: 'Work Out Time', done: false },
-                { id: 9, time: '00:30 - 01:30', name: 'Morning Sum and Discussion', done: false }
+                { id: 1, time: '00:00 - 00:30', name: 'Work Out Time', done: false },
+                { id: 2, time: '00:30 - 01:00', name: 'Morning Sum and Discussion', done: false },
+                { id: 3, time: '06:00 - 14:00', name: 'School', done: false },
+                { id: 4, time: '14:00 - 14:30', name: 'Physics Paper Class', done: false },
+                { id: 5, time: '17:30 - 18:00', name: 'Social Media', done: false },
+                { id: 6, time: '18:30 - 19:00', name: 'Dinner', done: false },
+                { id: 7, time: '19:00 - 19:30', name: 'Ruwan Sir CM REC', done: false },
+                { id: 8, time: '22:00 - 22:30', name: 'Note Revise', done: false },
+                { id: 9, time: '22:30 - 23:00', name: 'From Last Week', done: false },
+                { id: 10, time: '23:30 - 24:00', name: 'Work Out Time', done: false }
             ],
             'Wednesday': [
-                { id: 1, time: '06:00 - 14:00', name: 'School', done: false },
-                { id: 2, time: '16:30 - 17:00', name: 'Social Media', done: false },
-                { id: 3, time: '17:00 - 18:00', name: 'Revise Chemistry For the Paper', done: false },
-                { id: 4, time: '18:00 - 18:30', name: 'Dinner', done: false },
-                { id: 5, time: '18:30 - 20:30', name: 'Physics Homework', done: false },
-                { id: 6, time: '20:30 - 22:00', name: 'Study Chemistry', done: false },
-                { id: 7, time: '22:00 - 23:00', name: 'Monthly Review', done: false },
-                { id: 8, time: '23:00 - 23:30', name: 'Social Media', done: false },
-                { id: 9, time: '23:30 - 00:00', name: 'Work Out Time', done: false },
-                { id: 10, time: '00:30 - 01:30', name: 'Morning Sum and Discussion', done: false }
+                { id: 1, time: '00:00 - 00:30', name: 'Work Out Time', done: false },
+                { id: 2, time: '00:30 - 01:00', name: 'Morning Sum and Discussion', done: false },
+                { id: 3, time: '06:00 - 14:00', name: 'School', done: false },
+                { id: 4, time: '16:30 - 17:00', name: 'Social Media', done: false },
+                { id: 5, time: '17:00 - 17:30', name: 'Revise Chemistry For the Paper', done: false },
+                { id: 6, time: '18:00 - 18:30', name: 'Dinner', done: false },
+                { id: 7, time: '18:30 - 19:00', name: 'Physics Homework', done: false },
+                { id: 8, time: '20:30 - 21:00', name: 'Study Chemistry', done: false },
+                { id: 9, time: '22:00 - 22:30', name: 'Monthly Review', done: false },
+                { id: 10, time: '23:00 - 23:30', name: 'Social Media', done: false },
+                { id: 11, time: '23:30 - 24:00', name: 'Work Out Time', done: false }
             ],
             'Thursday': [
-                { id: 1, time: '06:00 - 14:00', name: 'School', done: false },
-                { id: 2, time: '14:30 - 17:00', name: 'Anuradha Sir Physics Class', done: false },
-                { id: 3, time: '18:30 - 19:00', name: 'Note Revise', done: false },
-                { id: 4, time: '19:00 - 19:30', name: 'Dinner', done: false },
-                { id: 5, time: '19:30 - 21:30', name: 'Anuradha Sir Reverse Class', done: false },
-                { id: 6, time: '21:30 - 22:00', name: 'Note Revise', done: false },
-                { id: 7, time: '22:00 - 22:30', name: 'Social Media', done: false },
-                { id: 8, time: '22:30 - 23:30', name: 'Past Paper MCQ Reviews', done: false },
-                { id: 9, time: '23:30 - 00:00', name: 'Work Out Time', done: false },
-                { id: 10, time: '00:30 - 01:30', name: 'Morning Sum and Discussion', done: false }
+                { id: 1, time: '00:00 - 00:30', name: 'Work Out Time', done: false },
+                { id: 2, time: '00:30 - 01:00', name: 'Morning Sum and Discussion', done: false },
+                { id: 3, time: '06:00 - 14:00', name: 'School', done: false },
+                { id: 4, time: '14:30 - 15:00', name: 'Anuradha Sir Physics Class', done: false },
+                { id: 5, time: '18:30 - 19:00', name: 'Note Revise', done: false },
+                { id: 6, time: '19:00 - 19:30', name: 'Dinner', done: false },
+                { id: 7, time: '19:30 - 20:00', name: 'Anuradha Sir Reverse Class', done: false },
+                { id: 8, time: '21:30 - 22:00', name: 'Note Revise', done: false },
+                { id: 9, time: '22:00 - 22:30', name: 'Social Media', done: false },
+                { id: 10, time: '22:30 - 23:00', name: 'Past Paper MCQ Reviews', done: false },
+                { id: 11, time: '23:30 - 24:00', name: 'Work Out Time', done: false }
             ],
             'Friday': [
-                { id: 1, time: '06:00 - 14:00', name: 'School', done: false },
-                { id: 2, time: '14:00 - 17:00', name: 'Chemistry Paper Class', done: false },
-                { id: 3, time: '19:00 - 19:30', name: 'Dinner', done: false },
-                { id: 4, time: '19:30 - 20:30', name: 'ATC Weekly Review', done: false },
-                { id: 5, time: '20:30 - 21:00', name: 'Social Media', done: false },
-                { id: 6, time: '21:00 - 22:00', name: 'Ajantha Sir Homework', done: false },
-                { id: 7, time: '22:30 - 23:30', name: 'Chemistry Homework', done: false },
-                { id: 8, time: '23:30 - 00:00', name: 'Work Out Time', done: false },
-                { id: 9, time: '00:30 - 01:30', name: 'Morning Sum and Discussion', done: false }
+                { id: 1, time: '00:00 - 00:30', name: 'Work Out Time', done: false },
+                { id: 2, time: '00:30 - 01:00', name: 'Morning Sum and Discussion', done: false },
+                { id: 3, time: '06:00 - 14:00', name: 'School', done: false },
+                { id: 4, time: '14:00 - 14:30', name: 'Chemistry Paper Class', done: false },
+                { id: 5, time: '19:00 - 19:30', name: 'Dinner', done: false },
+                { id: 6, time: '19:30 - 20:00', name: 'ATC Weekly Review', done: false },
+                { id: 7, time: '20:30 - 21:00', name: 'Social Media', done: false },
+                { id: 8, time: '21:00 - 21:30', name: 'Ajantha Sir Homework', done: false },
+                { id: 9, time: '22:30 - 23:00', name: 'Chemistry Homework', done: false },
+                { id: 10, time: '23:30 - 24:00', name: 'Work Out Time', done: false }
             ],
             'Saturday': [
-                { id: 1, time: '06:00 - 07:30', name: 'Physics Past Paper MCQ', done: false },
-                { id: 2, time: '07:30 - 12:00', name: 'Ajantha Sir CM Live Class', done: false },
-                { id: 3, time: '12:00 - 13:00', name: 'Note Revise & Social Media', done: false },
-                { id: 4, time: '14:00 - 17:30', name: 'Physics Homework Discussion & Anuradha Sir 2027 Physics', done: false },
-                { id: 5, time: '17:30 - 18:00', name: 'Note Revise', done: false },
-                { id: 6, time: '18:00 - 18:30', name: 'Dinner', done: false },
-                { id: 7, time: '18:30 - 21:00', name: 'Chemistry Paper Discussion', done: false },
-                { id: 8, time: '21:00 - 22:00', name: 'Daily Dose & Daily Recap', done: false },
-                { id: 9, time: '22:00 - 23:00', name: 'E Test - School', done: false },
-                { id: 10, time: '23:30 - 00:30', name: 'Work Out Time', done: false },
-                { id: 11, time: '00:30 - 01:30', name: 'ATC Weekly Review', done: false }
+                { id: 1, time: '00:00 - 00:30', name: 'Work Out Time', done: false },
+                { id: 2, time: '00:30 - 01:00', name: 'Morning Sum and Discussion', done: false },
+                { id: 3, time: '06:00 - 06:30', name: 'Physics Past Paper MCQ', done: false },
+                { id: 4, time: '07:30 - 08:00', name: 'Ajantha Sir CM Live Class', done: false },
+                { id: 5, time: '12:00 - 12:30', name: 'Note Revise', done: false },
+                { id: 6, time: '12:30 - 13:00', name: 'Social Media', done: false },
+                { id: 7, time: '14:00 - 14:30', name: 'Physics Homework Discussion', done: false },
+                { id: 8, time: '15:30 - 16:00', name: 'Anuradha Sir 2027 Physics Class', done: false },
+                { id: 9, time: '17:30 - 18:00', name: 'Note Revise', done: false },
+                { id: 10, time: '18:00 - 18:30', name: 'Dinner', done: false },
+                { id: 11, time: '18:30 - 19:00', name: 'Chemistry Paper Discussion', done: false },
+                { id: 12, time: '21:00 - 21:30', name: 'Daily Dose', done: false },
+                { id: 13, time: '21:30 - 22:00', name: 'Daily Recap', done: false },
+                { id: 14, time: '22:00 - 22:30', name: 'E Test - School', done: false },
+                { id: 15, time: '23:30 - 24:00', name: 'Work Out Time', done: false }
             ],
             'Sunday': [
-                { id: 1, time: '06:00 - 08:30', name: 'Physics Homework 2027', done: false },
-                { id: 2, time: '08:30 - 10:00', name: 'Physics Homework Discussion 2027', done: false },
-                { id: 3, time: '10:00 - 13:00', name: 'Physics Paper Discussion', done: false },
-                { id: 4, time: '13:00 - 17:00', name: 'Amila Sir Chemistry Live Class', done: false },
-                { id: 5, time: '17:00 - 18:00', name: 'Note Revise & Social Media', done: false },
-                { id: 6, time: '18:30 - 19:00', name: 'Dinner', done: false },
-                { id: 7, time: '19:00 - 22:00', name: 'Anuradha Sir Physics Class', done: false },
-                { id: 8, time: '22:00 - 23:00', name: 'Note Revise & Social Media', done: false },
-                { id: 9, time: '23:00 - 00:00', name: 'Work Out Time', done: false },
-                { id: 10, time: '00:00 - 00:30', name: 'Weekly Review', done: false }
+                { id: 1, time: '00:00 - 00:30', name: 'Work Out Time', done: false },
+                { id: 2, time: '00:30 - 01:00', name: 'ATC Weekly Review', done: false },
+                { id: 3, time: '06:00 - 06:30', name: 'Physics Homework 2027', done: false },
+                { id: 4, time: '08:30 - 09:00', name: 'Physics Homework Discussion 2027', done: false },
+                { id: 5, time: '10:00 - 10:30', name: 'Physics Paper Discussion', done: false },
+                { id: 6, time: '13:00 - 13:30', name: 'Amila Sir Chemistry Live Class', done: false },
+                { id: 7, time: '17:00 - 17:30', name: 'Note Revise', done: false },
+                { id: 8, time: '17:30 - 18:00', name: 'Social Media', done: false },
+                { id: 9, time: '18:00 - 18:30', name: 'Dinner', done: false },
+                { id: 10, time: '19:00 - 19:30', name: 'Anuradha Sir Physics Class', done: false },
+                { id: 11, time: '22:00 - 22:30', name: 'Note Revise', done: false },
+                { id: 12, time: '22:30 - 23:00', name: 'Social Media', done: false },
+                { id: 13, time: '23:00 - 23:30', name: 'Work Out Time', done: false }
             ]
         };
+
+        function handleLoginKeyPress(event) {
+            if (event.key === 'Enter') {
+                handleLogin();
+            }
+        }
 
         function handleLogin() {
             const val = document.getElementById('userInput').value.trim();
@@ -572,6 +711,7 @@
             document.getElementById('appContainer').style.display = 'none';
             document.getElementById('loginWrapper').style.display = 'flex';
             document.getElementById('userInput').value = '';
+            document.getElementById('userInput').focus();
         }
 
         function loadUserData() {
@@ -618,6 +758,7 @@
 
             const todaysTasks = timetableData[currentDayName] || [];
             let activeTaskFound = null;
+            let activeStartMin = 0;
 
             todaysTasks.forEach(task => {
                 const parts = task.time.split('-');
@@ -631,6 +772,7 @@
 
                         if (currentTimeMinutes >= startMin && currentTimeMinutes <= endMin) {
                             activeTaskFound = task;
+                            activeStartMin = startMin;
                         }
                     }
                 }
@@ -638,13 +780,20 @@
 
             const bannerName = document.getElementById('liveTaskName');
             const bannerTime = document.getElementById('liveTaskTime');
+            const elapsedBadge = document.getElementById('elapsedTimeBadge');
 
             if (activeTaskFound) {
                 bannerName.innerText = activeTaskFound.name;
-                bannerTime.innerText = `Scheduled Time: ${activeTaskFound.time} (${currentDayName})`;
+                bannerTime.innerText = `Scheduled: ${activeTaskFound.time} (${currentDayName})`;
+                
+                const currentTotalMin = now.getHours() * 60 + now.getMinutes();
+                const elapsedMin = currentTotalMin - activeStartMin;
+                const elapsedSec = now.getSeconds();
+                elapsedBadge.innerText = `⏱️ Elapsed: ${elapsedMin} mins ${elapsedSec} secs`;
             } else {
                 bannerName.innerText = "No active task right now (Free Time / Relax)";
                 bannerTime.innerText = `Current Day: ${currentDayName}`;
+                elapsedBadge.innerText = "⏱️ Status: Idle";
             }
         }
 
@@ -665,7 +814,7 @@
         }
 
         function renderTasks() {
-            document.getElementById('currentDayTitle').innerText = `${activeDay}'s Schedule`;
+            document.getElementById('currentDayTitle').innerText = `${activeDay}'s Schedule Dashboard`;
             const list = document.getElementById('taskList');
             list.innerHTML = '';
 
@@ -710,9 +859,16 @@
                 list.appendChild(li);
             });
 
-            document.getElementById('totalTasks').innerText = tasks.length;
+            const total = tasks.length;
+            const pending = total - completedCount;
+            const percentage = total > 0 ? Math.round((completedCount / total) * 100) : 0;
+
+            document.getElementById('totalTasks').innerText = total;
             document.getElementById('completedTasks').innerText = completedCount;
-            document.getElementById('pendingTasks').innerText = tasks.length - completedCount;
+            document.getElementById('pendingTasks').innerText = pending;
+
+            document.getElementById('progressPercentage').innerText = `${percentage}%`;
+            document.getElementById('progressBarFill').style.width = `${percentage}%`;
 
             saveUserData();
         }
