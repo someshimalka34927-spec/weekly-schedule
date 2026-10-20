@@ -379,17 +379,17 @@
         .play-game-btn:hover { box-shadow: 0 0 20px var(--neon-cyan); }
         .play-game-btn.locked-btn { background: #475569; color: #94a3b8; cursor: not-allowed; box-shadow: none; }
 
-        /* Full Screen Game Modal */
+        /* Direct Canvas Game Modal */
         .game-modal {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(3, 7, 18, 0.98); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; display: none; padding: 15px;
         }
         .game-modal-box {
-            background: #0f172a; border: 2px solid var(--neon-cyan); border-radius: 16px; width: 100%; height: 100%; max-width: 1280px; max-height: 850px; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 50px rgba(0, 243, 255, 0.5); overflow: hidden;
+            background: #0f172a; border: 2px solid var(--neon-cyan); border-radius: 16px; width: 100%; height: 100%; max-width: 900px; max-height: 700px; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 50px rgba(0, 243, 255, 0.5); overflow: hidden; text-align: center;
         }
         .game-header-bar { display: flex; justify-content: space-between; align-items: center; background: #1e293b; padding: 12px 20px; border-bottom: 1px solid var(--neon-cyan); }
         .close-modal { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-family: 'Orbitron', sans-serif; font-weight: bold; cursor: pointer; }
-        .game-iframe-container { flex: 1; width: 100%; background: #000; }
-        .game-iframe-container iframe { width: 100%; height: 100%; border: none; }
+        .canvas-container { flex: 1; display: flex; justify-content: center; align-items: center; background: #030712; position: relative; }
+        canvas { background: #0b0f19; border: 2px solid var(--neon-cyan); box-shadow: 0 0 20px rgba(0,243,255,0.3); }
     </style>
 </head>
 <body>
@@ -466,19 +466,19 @@
                     <p style="color: #94a3b8; margin-top: 5px; font-size: 0.95rem;" id="arcadeStatusDesc">Games unlock automatically only during Free Time (when no active task is running).</p>
                     <div class="games-grid" id="arcadeGamesGrid">
                         <div class="game-card" id="cardGame1">
-                            <h3>1. Madalin Stunt Cars 2</h3>
-                            <p>Real multiplayer racing & intense drifting.</p>
-                            <button class="play-game-btn locked-btn" id="btnGame1" onclick="tryPlayGame('https://www.crazygames.com/embed/madalin-stunt-cars-2')">LOCKED</button>
+                            <h3>1. M-Power Highway Racing</h3>
+                            <p>Drive your BMW car and dodge incoming obstacles!</p>
+                            <button class="play-game-btn locked-btn" id="btnGame1" onclick="tryPlayGame(1)">LOCKED</button>
                         </div>
                         <div class="game-card" id="cardGame2">
                             <h3>2. City Bus & Truck Simulator</h3>
-                            <p>Heavy vehicle simulation through city traffic.</p>
-                            <button class="play-game-btn locked-btn" id="btnGame2" onclick="tryPlayGame('https://www.crazygames.com/embed/city-bus-simulator')">LOCKED</button>
+                            <p>Navigate heavy traffic and collect cargo points.</p>
+                            <button class="play-game-btn locked-btn" id="btnGame2" onclick="tryPlayGame(2)">LOCKED</button>
                         </div>
                         <div class="game-card" id="cardGame3">
-                            <h3>3. Fire Strike & Combat Ops</h3>
-                            <p>Intense combat shooter against opponents.</p>
-                            <button class="play-game-btn locked-btn" id="btnGame3" onclick="tryPlayGame('https://www.crazygames.com/embed/fire-strike')">LOCKED</button>
+                            <h3>3. Fire Strike Combat Shooter</h3>
+                            <p>Shoot down incoming fire targets and defeat enemies.</p>
+                            <button class="play-game-btn locked-btn" id="btnGame3" onclick="tryPlayGame(3)">LOCKED</button>
                         </div>
                     </div>
                 </div>
@@ -522,14 +522,16 @@
         </div>
     </div>
 
-    <!-- FULL SCREEN GAME MODAL -->
+    <!-- DIRECT BUILT-IN CANVAS GAME MODAL -->
     <div class="game-modal" id="gameModal">
         <div class="game-modal-box">
             <div class="game-header-bar">
                 <h3 id="modalGameTitle" style="color: var(--neon-cyan); font-family: 'Orbitron', sans-serif;">Pro Arcade Game</h3>
                 <button class="close-modal" onclick="closeGameModal()">EXIT ✖</button>
             </div>
-            <div class="game-iframe-container" id="iframeContainer"></div>
+            <div class="canvas-container" id="canvasContainer">
+                <canvas id="gameCanvas" width="600" height="450"></canvas>
+            </div>
         </div>
     </div>
 
@@ -565,6 +567,7 @@
         let timetableData = {};
         let userStats = { xp: 0, level: 1 };
         let isFreeTimeActive = false;
+        let activeGameInterval = null;
 
         const defaultSchedule = {
             'Monday': [
@@ -815,7 +818,6 @@
                 let elapsedMin = currentTimeMinutes - activeStartMin;
                 homeElapsed.innerText = `⏱️ Elapsed: ${elapsedMin}m ${now.getSeconds()}s`;
 
-                // Lock Arcade
                 titleEl.innerText = "🔒 Free Time Arcade (LOCKED)";
                 descEl.innerText = "Games are locked because you have an active scheduled task right now!";
                 lockArcade(true);
@@ -825,9 +827,8 @@
                 homeTime.innerText = `Current Day: ${currentDayName} (No active task)`;
                 homeElapsed.innerText = "⏱️ Status: Relax / Play Games";
 
-                // Unlock Arcade
                 titleEl.innerText = "🔓 Free Time Arcade (UNLOCKED!)";
-                descEl.innerText = "Enjoy playing pro racing and combat games during your free time to earn XP!";
+                descEl.innerText = "Enjoy playing built-in interactive arcade games during your free time to earn XP!";
                 lockArcade(false);
             }
         }
@@ -848,12 +849,187 @@
             }
         }
 
-        function tryPlayGame(url) {
+        function tryPlayGame(gameId) {
             if (!isFreeTimeActive) {
                 alert("⚠️ Arcade is LOCKED! You can only play games during your Free Time when no tasks are scheduled.");
                 return;
             }
-            openGameModal(url);
+            openCanvasGame(gameId);
+        }
+
+        // --- BUILT-IN CANVAS GAMES LOGIC (100% WORKING & INTERACTIVE) ---
+        function openCanvasGame(gameId) {
+            const modal = document.getElementById('gameModal');
+            const title = document.getElementById('modalGameTitle');
+            modal.style.display = 'flex';
+            if (activeGameInterval) clearInterval(activeGameInterval);
+
+            const canvas = document.getElementById('gameCanvas');
+            const ctx = canvas.getContext('2d');
+
+            if (gameId === 1) {
+                title.innerText = "M-Power Highway Racing (Use Left/Right Arrow Keys)";
+                initRacingGame(canvas, ctx);
+            } else if (gameId === 2) {
+                title.innerText = "City Bus & Truck Simulator (Use Left/Right Arrow Keys)";
+                initBusGame(canvas, ctx);
+            } else if (gameId === 3) {
+                title.innerText = "Fire Strike Shooter (Move Mouse/Tap & Click to Shoot)";
+                initShooterGame(canvas, ctx);
+            }
+            addXP(10);
+        }
+
+        function closeGameModal() {
+            document.getElementById('gameModal').style.display = 'none';
+            if (activeGameInterval) clearInterval(activeGameInterval);
+        }
+
+        // Game 1: Highway Racing
+        function initRacingGame(canvas, ctx) {
+            let carX = 270, score = 0;
+            let obstacles = [{x: Math.random()*400 + 50, y: -100, speed: 4}];
+            let keys = {};
+
+            window.onkeydown = (e) => keys[e.key] = true;
+            window.onkeyup = (e) => keys[e.key] = false;
+
+            activeGameInterval = setInterval(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if (keys['ArrowLeft'] && carX > 50) carX -= 7;
+                if (keys['ArrowRight'] && carX < 500) carX += 7;
+
+                // Draw Road
+                ctx.fillStyle = '#1e293b';
+                ctx.fillRect(40, 0, 520, canvas.height);
+                ctx.strokeStyle = '#00f3ff';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(40, 0, 520, canvas.height);
+
+                // Draw Player BMW
+                ctx.fillStyle = '#00f3ff';
+                ctx.fillRect(carX, canvas.height - 90, 50, 70);
+                ctx.fillStyle = '#ff4d4d';
+                ctx.fillRect(carX + 10, canvas.height - 80, 30, 20);
+
+                // Obstacles
+                obstacles.forEach(obs => {
+                    obs.y += obs.speed;
+                    ctx.fillStyle = '#ff4d4d';
+                    ctx.fillRect(obs.x, obs.y, 50, 70);
+
+                    // Collision
+                    if (obs.y > canvas.height - 100 && obs.y < canvas.height - 20 && Math.abs(obs.x - carX) < 40) {
+                        alert(`💥 CRASHED! Final Racing Score: ${score}`);
+                        closeGameModal();
+                    }
+
+                    if (obs.y > canvas.height) {
+                        obs.y = -100;
+                        obs.x = Math.random() * 400 + 50;
+                        score += 20;
+                        addXP(5);
+                    }
+                });
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '20px Orbitron';
+                ctx.fillText(`Score: ${score}`, 60, 40);
+            }, 30);
+        }
+
+        // Game 2: Bus Simulator
+        function initBusGame(canvas, ctx) {
+            let busX = 260, score = 0;
+            let passengers = [{x: Math.random()*400 + 50, y: -100}];
+            let keys = {};
+
+            window.onkeydown = (e) => keys[e.key] = true;
+            window.onkeyup = (e) => keys[e.key] = false;
+
+            activeGameInterval = setInterval(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if (keys['ArrowLeft'] && busX > 50) busX -= 6;
+                if (keys['ArrowRight'] && busX < 490) busX += 6;
+
+                ctx.fillStyle = '#0f172a';
+                ctx.fillRect(40, 0, 520, canvas.height);
+
+                // Draw Bus
+                ctx.fillStyle = '#facc15';
+                ctx.fillRect(busX, canvas.height - 110, 60, 90);
+                ctx.fillStyle = '#00f3ff';
+                ctx.fillRect(busX + 10, canvas.height - 100, 40, 25);
+
+                passengers.forEach(p => {
+                    p.y += 3;
+                    ctx.fillStyle = '#10b981';
+                    ctx.beginPath();
+                    ctx.arc(p.x + 15, p.y + 15, 18, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    if (p.y > canvas.height - 110 && p.y < canvas.height - 20 && Math.abs(p.x - busX) < 50) {
+                        p.y = -100;
+                        p.x = Math.random() * 400 + 50;
+                        score += 15;
+                        addXP(5);
+                    }
+                    if (p.y > canvas.height) {
+                        p.y = -100;
+                        p.x = Math.random() * 400 + 50;
+                    }
+                });
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '20px Orbitron';
+                ctx.fillText(`Cargo/Passenger Score: ${score}`, 60, 40);
+            }, 30);
+        }
+
+        // Game 3: Fire Shooter
+        function initShooterGame(canvas, ctx) {
+            let targets = [{x: Math.random()*450 + 50, y: 100, radius: 25, speed: 2}];
+            let score = 0;
+
+            canvas.onclick = (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+
+                targets.forEach(t => {
+                    let dist = Math.hypot(mouseX - t.x, mouseY - t.y);
+                    if (dist < t.radius + 10) {
+                        score += 10;
+                        addXP(5);
+                        t.y = 0;
+                        t.x = Math.random() * 450 + 50;
+                    }
+                });
+            };
+
+            activeGameInterval = setInterval(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                targets.forEach(t => {
+                    t.y += t.speed;
+                    ctx.fillStyle = '#ff4d4d';
+                    ctx.beginPath();
+                    ctx.arc(t.x, t.y, t.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.strokeStyle = '#fff';
+                    ctx.stroke();
+
+                    if (t.y > canvas.height) {
+                        t.y = 0;
+                        t.x = Math.random() * 450 + 50;
+                    }
+                });
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '20px Orbitron';
+                ctx.fillText(`Fires Extinguished: ${score}`, 60, 40);
+                ctx.fillText(`(Click on Fire Balls to Shoot)`, 60, 420);
+            }, 30);
         }
 
         function renderDaysNav() {
@@ -947,19 +1123,6 @@
             sortTasksByTime(timetableData[activeDay]);
             nameInput.value = ''; timeInput.value = '';
             renderTasks();
-        }
-
-        function openGameModal(url) {
-            const modal = document.getElementById('gameModal');
-            const container = document.getElementById('iframeContainer');
-            modal.style.display = 'flex';
-            container.innerHTML = `<iframe src="${url}" allowfullscreen></iframe>`;
-            addXP(15);
-        }
-
-        function closeGameModal() {
-            document.getElementById('gameModal').style.display = 'none';
-            document.getElementById('iframeContainer').innerHTML = '';
         }
     </script>
 </body>
