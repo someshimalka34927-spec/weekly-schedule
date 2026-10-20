@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Cyber BMW Ultimate Schedule & Pro Arcade</title>
+    <title>AI Cyber BMW Ultimate Schedule & AL Math Arcade</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -388,8 +388,10 @@
         }
         .game-header-bar { display: flex; justify-content: space-between; align-items: center; background: #1e293b; padding: 12px 20px; border-bottom: 1px solid var(--neon-cyan); }
         .close-modal { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-family: 'Orbitron', sans-serif; font-weight: bold; cursor: pointer; }
-        .canvas-container { flex: 1; display: flex; justify-content: center; align-items: center; background: #030712; position: relative; }
+        .canvas-container { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #030712; position: relative; padding: 10px; }
         canvas { background: #0b0f19; border: 2px solid var(--neon-cyan); box-shadow: 0 0 20px rgba(0,243,255,0.3); }
+        .math-input-box { margin-top: 15px; display: flex; gap: 10px; justify-content: center; }
+        .math-input-box input { padding: 10px; width: 180px; border-radius: 6px; border: 1px solid var(--neon-cyan); background: #030712; color: #fff; font-size: 1.1rem; }
     </style>
 </head>
 <body>
@@ -403,9 +405,9 @@
 
     <!-- Start Audio Overlay -->
     <div class="audio-overlay" id="audioOverlay">
-        <h2>AI Cyber BMW Schedule & Arcade</h2>
-        <p style="color: #94a3b8; font-size: 1.1rem; max-width: 500px;">Initialize AI engine to access your dashboard, schedule, and free-time locked arcade.</p>
-        <button class="start-engine-btn" onclick="startAppWithSound()">INITIALIZE ENGINE 🏎️🔥</button>
+        <h2>AI Cyber BMW Schedule & AL Math Arcade</h2>
+        <p style="color: #94a3b8; font-size: 1.1rem; max-width: 500px;">Initialize AI engine to access your dashboard, schedule, and free-time locked AL Math games.</p>
+        <button class="start-engine-btn" onclick="startAppWithSound()">INITIALIZE ENGINE 🧮🔥</button>
     </div>
 
     <!-- Login Screen -->
@@ -462,22 +464,22 @@
 
                 <!-- Arcade Section (Free Time Locked) -->
                 <div class="panel" style="width: 100%; margin-top: 15px;">
-                    <h2 id="arcadeStatusTitle">🔒 Free Time Arcade (Locked during scheduled tasks)</h2>
-                    <p style="color: #94a3b8; margin-top: 5px; font-size: 0.95rem;" id="arcadeStatusDesc">Games unlock automatically only during Free Time (when no active task is running).</p>
+                    <h2 id="arcadeStatusTitle">🔒 AL Math & Physics Arcade (Locked during scheduled tasks)</h2>
+                    <p style="color: #94a3b8; margin-top: 5px; font-size: 0.95rem;" id="arcadeStatusDesc">Math games unlock automatically only during Free Time (when no active task is running).</p>
                     <div class="games-grid" id="arcadeGamesGrid">
                         <div class="game-card" id="cardGame1">
-                            <h3>1. M-Power Highway Racing</h3>
-                            <p>Drive your BMW car and dodge incoming obstacles!</p>
+                            <h3>1. Trigonometry Sin/Cos/Tan Quest</h3>
+                            <p>Solve angles and trigonometric values to win turbo boosts!</p>
                             <button class="play-game-btn locked-btn" id="btnGame1" onclick="tryPlayGame(1)">LOCKED</button>
                         </div>
                         <div class="game-card" id="cardGame2">
-                            <h3>2. City Bus & Truck Simulator</h3>
-                            <p>Navigate heavy traffic and collect cargo points.</p>
+                            <h3>2. Differentiation Calculus Dodger</h3>
+                            <p>Differentiate functions to clear obstacles on the cyber highway!</p>
                             <button class="play-game-btn locked-btn" id="btnGame2" onclick="tryPlayGame(2)">LOCKED</button>
                         </div>
                         <div class="game-card" id="cardGame3">
-                            <h3>3. Fire Strike Combat Shooter</h3>
-                            <p>Shoot down incoming fire targets and defeat enemies.</p>
+                            <h3>3. Vectors & Mechanics Target Shooter</h3>
+                            <p>Calculate vector resultants and shoot down physics equations!</p>
                             <button class="play-game-btn locked-btn" id="btnGame3" onclick="tryPlayGame(3)">LOCKED</button>
                         </div>
                     </div>
@@ -522,15 +524,19 @@
         </div>
     </div>
 
-    <!-- DIRECT BUILT-IN CANVAS GAME MODAL -->
+    <!-- AL MATH CANVAS GAME MODAL -->
     <div class="game-modal" id="gameModal">
         <div class="game-modal-box">
             <div class="game-header-bar">
-                <h3 id="modalGameTitle" style="color: var(--neon-cyan); font-family: 'Orbitron', sans-serif;">Pro Arcade Game</h3>
+                <h3 id="modalGameTitle" style="color: var(--neon-cyan); font-family: 'Orbitron', sans-serif;">AL Math Challenge</h3>
                 <button class="close-modal" onclick="closeGameModal()">EXIT ✖</button>
             </div>
             <div class="canvas-container" id="canvasContainer">
-                <canvas id="gameCanvas" width="600" height="450"></canvas>
+                <canvas id="gameCanvas" width="700" height="400"></canvas>
+                <div class="math-input-box" id="mathInputContainer" style="display:none;">
+                    <input type="text" id="mathAnswerInput" placeholder="Enter answer..." onkeypress="handleMathKeyPress(event)">
+                    <button class="add-btn" onclick="submitMathAnswer()">Submit Answer</button>
+                </div>
             </div>
         </div>
     </div>
@@ -568,6 +574,7 @@
         let userStats = { xp: 0, level: 1 };
         let isFreeTimeActive = false;
         let activeGameInterval = null;
+        let currentMathQuiz = null;
 
         const defaultSchedule = {
             'Monday': [
@@ -741,7 +748,7 @@
             if (userStats.xp >= xpNeeded) {
                 userStats.xp -= xpNeeded;
                 userStats.level++;
-                alert(`🎉 LEVEL UP! You reached LEVEL ${userStats.level}! 🏎️🔥`);
+                alert(`🎉 LEVEL UP! You reached LEVEL ${userStats.level}! 🧮🔥`);
             }
             saveUserData();
             updatePlayerUI();
@@ -750,11 +757,11 @@
         function updatePlayerUI() {
             let xpNeeded = userStats.level * 100;
             let percent = Math.min(100, Math.round((userStats.xp / xpNeeded) * 100));
-            document.getElementById('playerLevelBadge').innerText = `LEVEL ${userStats.level} Driver`;
+            document.getElementById('playerLevelBadge').innerText = `LEVEL ${userStats.level} Scholar`;
             document.getElementById('playerXpText').innerText = `XP: ${userStats.xp} / ${xpNeeded}`;
             document.getElementById('xpBarFill').style.width = `${percent}%`;
             
-            let titles = ["Cyber Rookie", "Highway Stig", "M-Power Pilot", "Drift Apex Lord", "AI Cyber Legend"];
+            let titles = ["Math Rookie", "Trig Adept", "Calculus Pilot", "Vector Master", "Combined Maths Legend"];
             let titleIdx = Math.min(titles.length - 1, userStats.level - 1);
             document.getElementById('playerTitle').innerText = titles[titleIdx];
         }
@@ -818,17 +825,17 @@
                 let elapsedMin = currentTimeMinutes - activeStartMin;
                 homeElapsed.innerText = `⏱️ Elapsed: ${elapsedMin}m ${now.getSeconds()}s`;
 
-                titleEl.innerText = "🔒 Free Time Arcade (LOCKED)";
+                titleEl.innerText = "🔒 AL Math Arcade (LOCKED)";
                 descEl.innerText = "Games are locked because you have an active scheduled task right now!";
                 lockArcade(true);
             } else {
                 isFreeTimeActive = true;
-                homeName.innerText = "✨ FREE TIME! (Arcade Unlocked)";
+                homeName.innerText = "✨ FREE TIME! (Math Arcade Unlocked)";
                 homeTime.innerText = `Current Day: ${currentDayName} (No active task)`;
-                homeElapsed.innerText = "⏱️ Status: Relax / Play Games";
+                homeElapsed.innerText = "⏱️ Status: Relax / Play Math Games";
 
-                titleEl.innerText = "🔓 Free Time Arcade (UNLOCKED!)";
-                descEl.innerText = "Enjoy playing built-in interactive arcade games during your free time to earn XP!";
+                titleEl.innerText = "🔓 AL Math Arcade (UNLOCKED!)";
+                descEl.innerText = "Enjoy playing AL Trigonometry, Calculus & Vector games during your free time!";
                 lockArcade(false);
             }
         }
@@ -844,23 +851,24 @@
                 } else {
                     card.classList.remove('locked');
                     btn.classList.remove('locked-btn');
-                    btn.innerText = "PLAY GAME 🚀";
+                    btn.innerText = "PLAY GAME 🧮";
                 }
             }
         }
 
         function tryPlayGame(gameId) {
             if (!isFreeTimeActive) {
-                alert("⚠️ Arcade is LOCKED! You can only play games during your Free Time when no tasks are scheduled.");
+                alert("⚠️ Arcade is LOCKED! You can only play math games during your Free Time when no tasks are scheduled.");
                 return;
             }
-            openCanvasGame(gameId);
+            openMathCanvasGame(gameId);
         }
 
-        // --- BUILT-IN CANVAS GAMES LOGIC (100% WORKING & INTERACTIVE) ---
-        function openCanvasGame(gameId) {
+        // --- AL MATH CANVAS GAMES LOGIC ---
+        function openMathCanvasGame(gameId) {
             const modal = document.getElementById('gameModal');
             const title = document.getElementById('modalGameTitle');
+            const inputContainer = document.getElementById('mathInputContainer');
             modal.style.display = 'flex';
             if (activeGameInterval) clearInterval(activeGameInterval);
 
@@ -868,168 +876,163 @@
             const ctx = canvas.getContext('2d');
 
             if (gameId === 1) {
-                title.innerText = "M-Power Highway Racing (Use Left/Right Arrow Keys)";
-                initRacingGame(canvas, ctx);
+                title.innerText = "1. Trigonometry Sin/Cos/Tan Quest";
+                inputContainer.style.display = 'flex';
+                initTrigGame(canvas, ctx);
             } else if (gameId === 2) {
-                title.innerText = "City Bus & Truck Simulator (Use Left/Right Arrow Keys)";
-                initBusGame(canvas, ctx);
+                title.innerText = "2. Differentiation Calculus Dodger";
+                inputContainer.style.display = 'flex';
+                initCalculusGame(canvas, ctx);
             } else if (gameId === 3) {
-                title.innerText = "Fire Strike Shooter (Move Mouse/Tap & Click to Shoot)";
-                initShooterGame(canvas, ctx);
+                title.innerText = "3. Vectors & Mechanics Resultant Shooter";
+                inputContainer.style.display = 'flex';
+                initVectorGame(canvas, ctx);
             }
+            document.getElementById('mathAnswerInput').value = '';
+            document.getElementById('mathAnswerInput').focus();
             addXP(10);
         }
 
         function closeGameModal() {
             document.getElementById('gameModal').style.display = 'none';
+            document.getElementById('mathInputContainer').style.display = 'none';
             if (activeGameInterval) clearInterval(activeGameInterval);
         }
 
-        // Game 1: Highway Racing
-        function initRacingGame(canvas, ctx) {
-            let carX = 270, score = 0;
-            let obstacles = [{x: Math.random()*400 + 50, y: -100, speed: 4}];
-            let keys = {};
-
-            window.onkeydown = (e) => keys[e.key] = true;
-            window.onkeyup = (e) => keys[e.key] = false;
-
-            activeGameInterval = setInterval(() => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                if (keys['ArrowLeft'] && carX > 50) carX -= 7;
-                if (keys['ArrowRight'] && carX < 500) carX += 7;
-
-                // Draw Road
-                ctx.fillStyle = '#1e293b';
-                ctx.fillRect(40, 0, 520, canvas.height);
-                ctx.strokeStyle = '#00f3ff';
-                ctx.lineWidth = 3;
-                ctx.strokeRect(40, 0, 520, canvas.height);
-
-                // Draw Player BMW
-                ctx.fillStyle = '#00f3ff';
-                ctx.fillRect(carX, canvas.height - 90, 50, 70);
-                ctx.fillStyle = '#ff4d4d';
-                ctx.fillRect(carX + 10, canvas.height - 80, 30, 20);
-
-                // Obstacles
-                obstacles.forEach(obs => {
-                    obs.y += obs.speed;
-                    ctx.fillStyle = '#ff4d4d';
-                    ctx.fillRect(obs.x, obs.y, 50, 70);
-
-                    // Collision
-                    if (obs.y > canvas.height - 100 && obs.y < canvas.height - 20 && Math.abs(obs.x - carX) < 40) {
-                        alert(`💥 CRASHED! Final Racing Score: ${score}`);
-                        closeGameModal();
-                    }
-
-                    if (obs.y > canvas.height) {
-                        obs.y = -100;
-                        obs.x = Math.random() * 400 + 50;
-                        score += 20;
-                        addXP(5);
-                    }
-                });
-
-                ctx.fillStyle = '#ffffff';
-                ctx.font = '20px Orbitron';
-                ctx.fillText(`Score: ${score}`, 60, 40);
-            }, 30);
-        }
-
-        // Game 2: Bus Simulator
-        function initBusGame(canvas, ctx) {
-            let busX = 260, score = 0;
-            let passengers = [{x: Math.random()*400 + 50, y: -100}];
-            let keys = {};
-
-            window.onkeydown = (e) => keys[e.key] = true;
-            window.onkeyup = (e) => keys[e.key] = false;
-
-            activeGameInterval = setInterval(() => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                if (keys['ArrowLeft'] && busX > 50) busX -= 6;
-                if (keys['ArrowRight'] && busX < 490) busX += 6;
-
-                ctx.fillStyle = '#0f172a';
-                ctx.fillRect(40, 0, 520, canvas.height);
-
-                // Draw Bus
-                ctx.fillStyle = '#facc15';
-                ctx.fillRect(busX, canvas.height - 110, 60, 90);
-                ctx.fillStyle = '#00f3ff';
-                ctx.fillRect(busX + 10, canvas.height - 100, 40, 25);
-
-                passengers.forEach(p => {
-                    p.y += 3;
-                    ctx.fillStyle = '#10b981';
-                    ctx.beginPath();
-                    ctx.arc(p.x + 15, p.y + 15, 18, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    if (p.y > canvas.height - 110 && p.y < canvas.height - 20 && Math.abs(p.x - busX) < 50) {
-                        p.y = -100;
-                        p.x = Math.random() * 400 + 50;
-                        score += 15;
-                        addXP(5);
-                    }
-                    if (p.y > canvas.height) {
-                        p.y = -100;
-                        p.x = Math.random() * 400 + 50;
-                    }
-                });
-
-                ctx.fillStyle = '#ffffff';
-                ctx.font = '20px Orbitron';
-                ctx.fillText(`Cargo/Passenger Score: ${score}`, 60, 40);
-            }, 30);
-        }
-
-        // Game 3: Fire Shooter
-        function initShooterGame(canvas, ctx) {
-            let targets = [{x: Math.random()*450 + 50, y: 100, radius: 25, speed: 2}];
+        // Game 1: Trigonometry Quiz & Obstacle
+        function initTrigGame(canvas, ctx) {
             let score = 0;
-
-            canvas.onclick = (e) => {
-                const rect = canvas.getBoundingClientRect();
-                const mouseX = e.clientX - rect.left;
-                const mouseY = e.clientY - rect.top;
-
-                targets.forEach(t => {
-                    let dist = Math.hypot(mouseX - t.x, mouseY - t.y);
-                    if (dist < t.radius + 10) {
-                        score += 10;
-                        addXP(5);
-                        t.y = 0;
-                        t.x = Math.random() * 450 + 50;
+            const questions = [
+                {q: "sin(30°) = ? (give as decimal 0.5)", ans: "0.5"},
+                {q: "cos(0°) = ?", ans: "1"},
+                {q: "tan(45°) = ?", ans: "1"},
+                {q: "sin(90°) = ?", ans: "1"},
+                {q: "cos(180°) = ?", ans: "-1"}
+            ];
+            let qIdx = 0;
+            currentMathQuiz = {
+                check: (val) => {
+                    if (val.trim() === questions[qIdx].ans) {
+                        score += 20;
+                        addXP(15);
+                        qIdx = (qIdx + 1) % questions.length;
+                        alert("✅ Correct! +20 Points & +15 XP");
+                    } else {
+                        alert(`❌ Incorrect! Correct answer was ${questions[qIdx].ans}`);
                     }
-                });
+                    document.getElementById('mathAnswerInput').value = '';
+                }
             };
 
             activeGameInterval = setInterval(() => {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#00f3ff';
+                ctx.font = '22px Orbitron';
+                ctx.fillText("Trigonometry Challenge:", 50, 60);
                 
-                targets.forEach(t => {
-                    t.y += t.speed;
-                    ctx.fillStyle = '#ff4d4d';
-                    ctx.beginPath();
-                    ctx.arc(t.x, t.y, t.radius, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.strokeStyle = '#fff';
-                    ctx.stroke();
-
-                    if (t.y > canvas.height) {
-                        t.y = 0;
-                        t.x = Math.random() * 450 + 50;
-                    }
-                });
+                ctx.fillStyle = '#facc15';
+                ctx.font = '26px Orbitron';
+                ctx.fillText(questions[qIdx].q, 50, 140);
 
                 ctx.fillStyle = '#ffffff';
-                ctx.font = '20px Orbitron';
-                ctx.fillText(`Fires Extinguished: ${score}`, 60, 40);
-                ctx.fillText(`(Click on Fire Balls to Shoot)`, 60, 420);
-            }, 30);
+                ctx.font = '20px Rajdhani';
+                ctx.fillText(`Trig Score: ${score}`, 50, 240);
+                ctx.fillText(`Type your exact answer below & click Submit!`, 50, 280);
+            }, 100);
+        }
+
+        // Game 2: Differentiation Calculus
+        function initCalculusGame(canvas, ctx) {
+            let score = 0;
+            const questions = [
+                {q: "d/dx (x^2) = ?", ans: "2x"},
+                {q: "d/dx (3x^3) = ?", ans: "9x^2"},
+                {q: "d/dx (5x + 4) = ?", ans: "5"},
+                {q: "d/dx (sin x) = ?", ans: "cos x"},
+                {q: "d/dx (cos x) = ?", ans: "-sin x"}
+            ];
+            let qIdx = 0;
+            currentMathQuiz = {
+                check: (val) => {
+                    if (val.trim().toLowerCase() === questions[qIdx].ans.toLowerCase()) {
+                        score += 25;
+                        addXP(20);
+                        qIdx = (qIdx + 1) % questions.length;
+                        alert("✅ Correct derivative! +25 Points & +20 XP");
+                    } else {
+                        alert(`❌ Incorrect! Expected: ${questions[qIdx].ans}`);
+                    }
+                    document.getElementById('mathAnswerInput').value = '';
+                }
+            };
+
+            activeGameInterval = setInterval(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#9d4edd';
+                ctx.font = '22px Orbitron';
+                ctx.fillText("Calculus Differentiation:", 50, 60);
+                
+                ctx.fillStyle = '#00f3ff';
+                ctx.font = '26px Orbitron';
+                ctx.fillText(questions[qIdx].q, 50, 140);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '20px Rajdhani';
+                ctx.fillText(`Calculus Score: ${score}`, 50, 240);
+                ctx.fillText(`(e.g., type 2x, 5, cos x etc.)`, 50, 280);
+            }, 100);
+        }
+
+        // Game 3: Vectors & Mechanics
+        function initVectorGame(canvas, ctx) {
+            let score = 0;
+            const questions = [
+                {q: "If vector A=(3,4), magnitude |A| = ?", ans: "5"},
+                {q: "Scalar product of perpendicular vectors = ?", ans: "0"},
+                {q: "Velocity = Rate of change of...?", ans: "displacement"},
+                {q: "Force F = mass x ...?", ans: "acceleration"}
+            ];
+            let qIdx = 0;
+            currentMathQuiz = {
+                check: (val) => {
+                    if (val.trim().toLowerCase() === questions[qIdx].ans.toLowerCase()) {
+                        score += 30;
+                        addXP(25);
+                        qIdx = (qIdx + 1) % questions.length;
+                        alert("🎯 Excellent Mechanics! +30 Points & +25 XP");
+                    } else {
+                        alert(`❌ Incorrect! Expected: ${questions[qIdx].ans}`);
+                    }
+                    document.getElementById('mathAnswerInput').value = '';
+                }
+            };
+
+            activeGameInterval = setInterval(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#ff4d4d';
+                ctx.font = '22px Orbitron';
+                ctx.fillText("Vectors & Mechanics Challenge:", 50, 60);
+                
+                ctx.fillStyle = '#facc15';
+                ctx.font = '24px Orbitron';
+                ctx.fillText(questions[qIdx].q, 50, 140);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '20px Rajdhani';
+                ctx.fillText(`Mechanics Score: ${score}`, 50, 240);
+                ctx.fillText(`Type answer and hit Submit!`, 50, 280);
+            }, 100);
+        }
+
+        function handleMathKeyPress(event) {
+            if (event.key === 'Enter') submitMathAnswer();
+        }
+
+        function submitMathAnswer() {
+            const val = document.getElementById('mathAnswerInput').value;
+            if (currentMathQuiz && val) {
+                currentMathQuiz.check(val);
+            }
         }
 
         function renderDaysNav() {
