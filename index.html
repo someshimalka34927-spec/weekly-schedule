@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BMW Ultimate Weekly Schedule</title>
+    <title>BMW Ultimate Weekly Schedule & Games</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -21,7 +21,7 @@
             overflow-x: hidden;
         }
         .overlay {
-            background: rgba(5, 5, 5, 0.85);
+            background: rgba(5, 5, 5, 0.88);
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
@@ -46,22 +46,16 @@
             filter: drop-shadow(0 0 10px rgba(0, 162, 232, 0.9));
         }
         @keyframes riseUp {
-            0% {
-                transform: translateY(0) scale(0.8) rotate(0deg);
-                opacity: 0.8;
-            }
+            0% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 0.8; }
             50% { opacity: 0.6; }
-            100% {
-                transform: translateY(-110vh) scale(1.2) rotate(360deg);
-                opacity: 0;
-            }
+            100% { transform: translateY(-110vh) scale(1.2) rotate(360deg); opacity: 0; }
         }
 
         /* Start Audio Overlay / Button */
         .audio-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.92);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -157,7 +151,7 @@
         .container {
             max-width: 1050px;
             margin: 0 auto;
-            background: rgba(18, 18, 18, 0.9);
+            background: rgba(18, 18, 18, 0.92);
             border-radius: 16px;
             padding: 30px;
             box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.7);
@@ -213,7 +207,57 @@
         }
         .logout-btn:hover { background: #c82333; box-shadow: 0 0 10px rgba(220, 53, 69, 0.6); }
 
-        /* Live Current Task Banner with Elapsed Timer */
+        /* Level & XP Player Status Bar */
+        .player-status-bar {
+            background: linear-gradient(135deg, #111, #222);
+            border: 1px solid #00aced;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 0 15px rgba(0, 172, 237, 0.2);
+        }
+        .level-badge {
+            font-family: 'Orbitron', sans-serif;
+            background: #0066b1;
+            color: #fff;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            border: 1px solid #00aced;
+        }
+        .xp-info {
+            flex: 1;
+            min-width: 200px;
+        }
+        .xp-text {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .xp-bar-bg {
+            width: 100%;
+            height: 10px;
+            background: #333;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .xp-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00aced, #ffeb3b);
+            border-radius: 5px;
+            transition: width 0.4s ease;
+        }
+
+        /* Live Current Task Banner */
         .live-banner {
             background: linear-gradient(135deg, #004d80, #0066b1, #00aced);
             background-size: 200% 200%;
@@ -223,8 +267,6 @@
             margin-bottom: 25px;
             box-shadow: 0 6px 20px rgba(0, 102, 177, 0.5);
             border: 2px solid #fff;
-            position: relative;
-            overflow: hidden;
         }
         @keyframes gradientMove {
             0% { background-position: 0% 50%; }
@@ -244,7 +286,6 @@
             font-size: 1.6rem;
             font-weight: 700;
             margin-bottom: 6px;
-            letter-spacing: 0.5px;
         }
         .live-task-meta {
             display: flex;
@@ -300,6 +341,35 @@
             box-shadow: 0 0 10px rgba(40, 167, 69, 0.8);
         }
 
+        /* Main Tabs Selector (Schedule vs Games) */
+        .main-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .tab-main-btn {
+            flex: 1;
+            background: #1c1c1c;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 14px;
+            border-radius: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+        .tab-main-btn.active {
+            background: linear-gradient(135deg, #0066b1, #00aced);
+            border-color: #fff;
+            box-shadow: 0 0 15px rgba(0, 172, 237, 0.6);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
         .days-nav {
             display: flex;
             gap: 10px;
@@ -350,7 +420,7 @@
             border: 1px solid #555;
             background: #1c1c1c;
             color: #fff;
-            font-size: 0.95px;
+            font-size: 0.95rem;
             outline: none;
             transition: 0.3s;
         }
@@ -435,6 +505,96 @@
         .btn-delete { background: #dc3545; color: white; }
         .btn-delete:hover { background: #c82333; }
 
+        /* Games Arcade Styling */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .game-card {
+            background: rgba(25, 25, 25, 0.85);
+            border: 1px solid #0066b1;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: #00aced;
+            box-shadow: 0 8px 25px rgba(0, 172, 237, 0.3);
+        }
+        .game-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00aced;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        .game-card p {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        .play-game-btn {
+            background: linear-gradient(135deg, #0066b1, #00aced);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .play-game-btn:hover { background: linear-gradient(135deg, #0080ff, #0066b1); }
+
+        /* Modal for Active Game Play */
+        .game-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.88);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            display: none;
+        }
+        .game-modal-box {
+            background: #1a1a1a;
+            border: 2px solid #00aced;
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 172, 237, 0.5);
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px; right: 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            width: 35px; height: 35px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .game-area {
+            margin: 20px 0;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Summary Box */
         .summary-box {
             background: rgba(12, 12, 12, 0.95);
             border-radius: 12px;
@@ -445,6 +605,7 @@
             flex-wrap: wrap;
             gap: 20px;
             border: 1px solid rgba(0, 172, 237, 0.2);
+            margin-top: 25px;
         }
         .summary-item h3 {
             font-family: 'Orbitron', sans-serif;
@@ -471,8 +632,8 @@
 
     <!-- Initial Start Engine Screen -->
     <div class="audio-overlay" id="audioOverlay">
-        <h2>BMW Ultimate Weekly Schedule</h2>
-        <p style="color: #ccc; font-size: 1.1rem; max-width: 500px;">Click below to start the engine, rev up your workflow, and enter your schedule dashboard.</p>
+        <h2>BMW Ultimate Weekly Schedule & Games</h2>
+        <p style="color: #ccc; font-size: 1.1rem; max-width: 500px;">Click below to start the engine, manage your schedule, and play games during your free time!</p>
         <button class="start-engine-btn" onclick="startAppWithSound()">Start BMW Engine 🏎️💨</button>
     </div>
 
@@ -489,12 +650,26 @@
     <!-- Main App Container -->
     <div class="container" id="appContainer">
         <header>
-            <h1>BMW <span>Weekly Schedule</span></h1>
+            <h1>BMW <span>Dashboard</span></h1>
             <div class="header-right">
                 <div class="clock" id="liveClock">Loading time...</div>
                 <button class="logout-btn" onclick="handleLogout()">Logout</button>
             </div>
         </header>
+
+        <!-- Player Level & XP Status Bar -->
+        <div class="player-status-bar">
+            <div class="level-badge" id="playerLevelBadge">LEVEL 1 Driver</div>
+            <div class="xp-info">
+                <div class="xp-text">
+                    <span id="playerTitle">Rookie</span>
+                    <span id="playerXpText">XP: 0 / 100</span>
+                </div>
+                <div class="xp-bar-bg">
+                    <div class="xp-bar-fill" id="xpBarFill"></div>
+                </div>
+            </div>
+        </div>
 
         <!-- Live Current Task Banner -->
         <div class="live-banner" id="liveBanner">
@@ -517,18 +692,58 @@
             </div>
         </div>
 
-        <div class="days-nav" id="daysNav"></div>
+        <!-- Main Switch Tabs (Schedule vs Arcade Games) -->
+        <div class="main-tabs">
+            <button class="tab-main-btn active" onclick="switchMainTab('schedule')">📅 Weekly Schedule</button>
+            <button class="tab-main-btn" onclick="switchMainTab('games')">🎮 Free Time Arcade (5 Games)</button>
+        </div>
 
-        <div class="panel">
-            <h2 id="currentDayTitle">Manage Tasks</h2>
-            
-            <div class="add-task-box">
-                <input type="text" id="newTaskName" placeholder="New Task Name">
-                <input type="text" id="newTaskTime" placeholder="Time Range (e.g., 06:00 - 14:00)">
-                <button class="add-btn" onclick="addNewTask()">Add Task</button>
+        <!-- SCHEDULE TAB -->
+        <div id="scheduleTab" class="tab-content active">
+            <div class="days-nav" id="daysNav"></div>
+            <div class="panel">
+                <h2 id="currentDayTitle">Manage Tasks</h2>
+                <div class="add-task-box">
+                    <input type="text" id="newTaskName" placeholder="New Task Name">
+                    <input type="text" id="newTaskTime" placeholder="Time Range (e.g., 14:00 - 15:00)">
+                    <button class="add-btn" onclick="addNewTask()">Add Task</button>
+                </div>
+                <ul class="task-list" id="taskList"></ul>
             </div>
+        </div>
 
-            <ul class="task-list" id="taskList"></ul>
+        <!-- GAMES ARCADE TAB -->
+        <div id="gamesTab" class="tab-content">
+            <div class="panel">
+                <h2 style="margin-bottom: 20px;">🎮 Free Time Arcade — Level Up Your XP!</h2>
+                <div class="games-grid">
+                    <div class="game-card">
+                        <h3>1. Memory Match</h3>
+                        <p>Match pairs of BMW cards to test your memory & earn XP!</p>
+                        <button class="play-game-btn" onclick="openGame(1)">Play Game</button>
+                    </div>
+                    <div class="game-card">
+                        <h3>2. Reaction Speed</h3>
+                        <p>Test how fast you can hit the brake when green light hits!</p>
+                        <button class="play-game-btn" onclick="openGame(2)">Play Game</button>
+                    </div>
+                    <div class="game-card">
+                        <h3>3. BMW Drift Clicker</h3>
+                        <p>Tap the drift button as fast as you can to score high!</p>
+                        <button class="play-game-btn" onclick="openGame(3)">Play Game</button>
+                    </div>
+                    <div class="game-card">
+                        <h3>4. Math Speed Run</h3>
+                        <p>Solve quick arithmetic problems to boost brain power.</p>
+                        <button class="play-game-btn" onclick="openGame(4)">Play Game</button>
+                    </div>
+                    <div class="game-card">
+                        <h3>5. Color Reflex</h3>
+                        <p>Match the text color before time runs out!</p>
+                        <button class="play-game-btn" onclick="openGame(5)">Play Game</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="summary-box">
@@ -544,6 +759,15 @@
                 <h3 id="pendingTasks" style="color: #dc3545;">0</h3>
                 <p>Pending (Not Done)</p>
             </div>
+        </div>
+    </div>
+
+    <!-- GAME MODAL CONTAINER -->
+    <div class="game-modal" id="gameModal">
+        <div class="game-modal-box">
+            <button class="close-modal" onclick="closeGameModal()">×</button>
+            <h2 id="modalGameTitle" style="color: #00aced; font-family: 'Orbitron', sans-serif;">Game Title</h2>
+            <div class="game-area" id="modalGameArea"></div>
         </div>
     </div>
 
@@ -565,9 +789,7 @@
 
             container.appendChild(logo);
 
-            setTimeout(() => {
-                logo.remove();
-            }, parseFloat(duration) * 1000);
+            setTimeout(() => { logo.remove(); }, parseFloat(duration) * 1000);
         }
         setInterval(createBmwLogo, 700);
 
@@ -590,8 +812,10 @@
         let currentUser = localStorage.getItem('bmw_current_user') || null;
         let activeDay = orderedDays[(new Date().getDay() + 6) % 7];
         let timetableData = {};
+        
+        // Gamification User Stats
+        let userStats = { xp: 0, level: 1 };
 
-        // Updated Default Schedule directly mapped from the Excel sheet (00:00 - 24:00)
         const defaultSchedule = {
             'Monday': [
                 { id: 1, time: '00:00 - 00:30', name: 'Weekly Review', done: false },
@@ -688,17 +912,12 @@
         };
 
         function handleLoginKeyPress(event) {
-            if (event.key === 'Enter') {
-                handleLogin();
-            }
+            if (event.key === 'Enter') handleLogin();
         }
 
         function handleLogin() {
             const val = document.getElementById('userInput').value.trim();
-            if (!val) {
-                alert('Please enter your Email or Student ID!');
-                return;
-            }
+            if (!val) { alert('Please enter your Email or Student ID!'); return; }
             currentUser = val;
             localStorage.setItem('bmw_current_user', currentUser);
             loadUserData();
@@ -716,17 +935,25 @@
 
         function loadUserData() {
             const savedData = localStorage.getItem(`bmw_schedule_${currentUser}`);
+            const savedStats = localStorage.getItem(`bmw_stats_${currentUser}`);
             if (savedData) {
                 timetableData = JSON.parse(savedData);
+                Object.keys(timetableData).forEach(day => sortTasksByTime(timetableData[day]));
             } else {
                 timetableData = JSON.parse(JSON.stringify(defaultSchedule));
+                Object.keys(timetableData).forEach(day => sortTasksByTime(timetableData[day]));
                 saveUserData();
             }
+            if (savedStats) {
+                userStats = JSON.parse(savedStats);
+            }
+            updatePlayerUI();
         }
 
         function saveUserData() {
             if (currentUser) {
                 localStorage.setItem(`bmw_schedule_${currentUser}`, JSON.stringify(timetableData));
+                localStorage.setItem(`bmw_stats_${currentUser}`, JSON.stringify(userStats));
             }
         }
 
@@ -747,6 +974,61 @@
             document.getElementById('audioOverlay').style.display = 'none';
             loadUserData();
             showApp();
+        }
+
+        function addXP(amount) {
+            userStats.xp += amount;
+            let xpNeeded = userStats.level * 100;
+            if (userStats.xp >= xpNeeded) {
+                userStats.xp -= xpNeeded;
+                userStats.level++;
+                alert(`🎉 Congratulations! You leveled up to LEVEL ${userStats.level}! 🏎️💨`);
+            }
+            saveUserData();
+            updatePlayerUI();
+        }
+
+        function updatePlayerUI() {
+            let xpNeeded = userStats.level * 100;
+            let percent = Math.min(100, Math.round((userStats.xp / xpNeeded) * 100));
+            document.getElementById('playerLevelBadge').innerText = `LEVEL ${userStats.level} Driver`;
+            document.getElementById('playerXpText').innerText = `XP: ${userStats.xp} / ${xpNeeded}`;
+            document.getElementById('xpBarFill').style.width = `${percent}%`;
+            
+            let titles = ["Rookie", "Street Racer", "M-Power Pro", "Drift Master", "BMW Legend"];
+            let titleIdx = Math.min(titles.length - 1, userStats.level - 1);
+            document.getElementById('playerTitle').innerText = titles[titleIdx];
+        }
+
+        function switchMainTab(tab) {
+            document.querySelectorAll('.tab-main-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            if (tab === 'schedule') {
+                document.querySelectorAll('.tab-main-btn')[0].classList.add('active');
+                document.getElementById('scheduleTab').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab-main-btn')[1].classList.add('active');
+                document.getElementById('gamesTab').classList.add('active');
+            }
+        }
+
+        function getTaskStartMinutes(timeStr) {
+            if (!timeStr) return 9999;
+            const parts = timeStr.split('-');
+            if (parts.length > 0) {
+                const startParts = parts[0].trim().split(':');
+                if (startParts.length === 2) {
+                    let hrs = parseInt(startParts[0]) || 0;
+                    let mins = parseInt(startParts[1]) || 0;
+                    return hrs * 60 + mins;
+                }
+            }
+            return 9999;
+        }
+
+        function sortTasksByTime(tasksArray) {
+            tasksArray.sort((a, b) => getTaskStartMinutes(a.time) - getTaskStartMinutes(b.time));
         }
 
         function updateClockAndLiveTask() {
@@ -791,7 +1073,7 @@
                 const elapsedSec = now.getSeconds();
                 elapsedBadge.innerText = `⏱️ Elapsed: ${elapsedMin} mins ${elapsedSec} secs`;
             } else {
-                bannerName.innerText = "No active task right now (Free Time / Relax)";
+                bannerName.innerText = "No active task right now (Free Time / Play Games!)";
                 bannerTime.innerText = `Current Day: ${currentDayName}`;
                 elapsedBadge.innerText = "⏱️ Status: Idle";
             }
@@ -818,7 +1100,9 @@
             const list = document.getElementById('taskList');
             list.innerHTML = '';
 
-            const tasks = timetableData[activeDay] || [];
+            let tasks = timetableData[activeDay] || [];
+            sortTasksByTime(tasks);
+
             let completedCount = 0;
             const now = new Date();
             const currentDayName = orderedDays[(now.getDay() + 6) % 7];
@@ -875,6 +1159,7 @@
 
         function toggleTask(index) {
             timetableData[activeDay][index].done = !timetableData[activeDay][index].done;
+            if (timetableData[activeDay][index].done) addXP(20); // Reward XP for completing tasks
             renderTasks();
         }
 
@@ -887,22 +1172,233 @@
             const nameInput = document.getElementById('newTaskName');
             const timeInput = document.getElementById('newTaskTime');
 
-            if (!nameInput.value.trim()) {
-                alert('Please enter a task name!');
-                return;
-            }
+            if (!nameInput.value.trim()) { alert('Please enter a task name!'); return; }
 
             const newTask = {
                 id: Date.now(),
                 name: nameInput.value.trim(),
-                time: timeInput.value.trim() || 'Anytime',
+                time: timeInput.value.trim() || '00:00 - 00:30',
                 done: false
             };
 
             timetableData[activeDay].push(newTask);
+            sortTasksByTime(timetableData[activeDay]);
+
             nameInput.value = '';
             timeInput.value = '';
             renderTasks();
+        }
+
+        // --- MINI GAMES LOGIC ---
+        function openGame(gameId) {
+            const modal = document.getElementById('gameModal');
+            const title = document.getElementById('modalGameTitle');
+            const area = document.getElementById('modalGameArea');
+            modal.style.display = 'flex';
+            area.innerHTML = '';
+
+            if (gameId === 1) {
+                title.innerText = "Memory Match";
+                initMemoryGame(area);
+            } else if (gameId === 2) {
+                title.innerText = "Reaction Speed Test";
+                initReactionGame(area);
+            } else if (gameId === 3) {
+                title.innerText = "BMW Drift Clicker";
+                initDriftClickerGame(area);
+            } else if (gameId === 4) {
+                title.innerText = "Math Speed Run";
+                initMathGame(area);
+            } else if (gameId === 5) {
+                title.innerText = "Color Reflex";
+                initColorGame(area);
+            }
+        }
+
+        function closeGameModal() {
+            document.getElementById('gameModal').style.display = 'none';
+        }
+
+        // Game 1: Memory Match
+        function initMemoryGame(area) {
+            let emojis = ['🏎️', '🏁', '🚙', '🏎️', '🏁', '🚙'];
+            emojis.sort(() => Math.random() - 0.5);
+            let flipped = [];
+            let matched = 0;
+
+            area.innerHTML = `<p>Find matching pairs! Click cards to flip.</p><div style="display:grid; grid-template-columns:repeat(3, 70px); gap:10px;" id="memGrid"></div>`;
+            const grid = document.getElementById('memGrid');
+
+            emojis.forEach((emoji, idx) => {
+                let btn = document.createElement('button');
+                btn.style.cssText = "height:70px; font-size:1.8rem; background:#222; border:1px solid #00aced; border-radius:8px; cursor:pointer; color:transparent;";
+                btn.dataset.emoji = emoji;
+                btn.onclick = () => {
+                    if (btn.style.color !== 'transparent' || flipped.length >= 2) return;
+                    btn.style.color = '#fff';
+                    btn.innerText = emoji;
+                    flipped.push(btn);
+
+                    if (flipped.length === 2) {
+                        if (flipped[0].dataset.emoji === flipped[1].dataset.emoji) {
+                            matched++;
+                            flipped = [];
+                            if (matched === 3) {
+                                addXP(30);
+                                setTimeout(() => alert("🎉 You won! +30 XP"), 200);
+                            }
+                        } else {
+                            setTimeout(() => {
+                                flipped[0].style.color = 'transparent';
+                                flipped[0].innerText = '';
+                                flipped[1].style.color = 'transparent';
+                                flipped[1].innerText = '';
+                                flipped = [];
+                            }, 600);
+                        }
+                    }
+                };
+                grid.appendChild(btn);
+            });
+        }
+
+        // Game 2: Reaction Speed
+        function initReactionGame(area) {
+            area.innerHTML = `<div id="reactBox" style="width:100%; height:120px; background:#dc3545; border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:1.2rem; cursor:pointer;">Wait for GREEN...</div>`;
+            let box = document.getElementById('reactBox');
+            let startTime = 0;
+            let timeout = setTimeout(() => {
+                box.style.background = '#28a745';
+                box.innerText = "CLICK NOW! 🏎️💨";
+                startTime = Date.now();
+            }, Math.random() * 2000 + 1500);
+
+            box.onclick = () => {
+                if (startTime === 0) {
+                    clearTimeout(timeout);
+                    box.innerText = "Too early! Restarting...";
+                    setTimeout(() => initReactionGame(area), 1000);
+                } else {
+                    let reactionTime = Date.now() - startTime;
+                    addXP(25);
+                    box.innerText = `Great! ${reactionTime} ms! +25 XP`;
+                    box.onclick = null;
+                }
+            };
+        }
+
+        // Game 3: BMW Drift Clicker
+        function initDriftClickerGame(area) {
+            let clicks = 0;
+            let timeLeft = 5;
+            area.innerHTML = `
+                <p>Tap the Drift Button as fast as you can in 5 seconds!</p>
+                <h3 id="driftCount" style="font-size:2rem; color:#ffeb3b;">0 Drifts</h3>
+                <h4 id="driftTimer">Time: 5s</h4>
+                <button id="driftBtn" class="play-game-btn" style="padding:15px 30px; font-size:1.2rem;">DRIFT! 🚗💨</button>
+            `;
+            let btn = document.getElementById('driftBtn');
+            let countEl = document.getElementById('driftCount');
+            let timerEl = document.getElementById('driftTimer');
+            let started = false;
+            let interval;
+
+            btn.onclick = () => {
+                if (!started) {
+                    started = true;
+                    interval = setInterval(() => {
+                        timeLeft--;
+                        timerEl.innerText = `Time: ${timeLeft}s`;
+                        if (timeLeft <= 0) {
+                            clearInterval(interval);
+                            btn.onclick = null;
+                            btn.style.opacity = 0.5;
+                            let earned = clicks * 3;
+                            addXP(earned);
+                            alert(`🏁 Time's up! You got ${clicks} drifts! Earned +${earned} XP!`);
+                        }
+                    }, 1000);
+                }
+                clicks++;
+                countEl.innerText = `${clicks} Drifts`;
+            };
+        }
+
+        // Game 4: Math Speed Run
+        function initMathGame(area) {
+            let score = 0;
+            function nextQuestion() {
+                let n1 = Math.floor(Math.random() * 20) + 1;
+                let n2 = Math.floor(Math.random() * 20) + 1;
+                let ops = ['+', '-', '*'];
+                let op = ops[Math.floor(Math.random() * ops.length)];
+                let ans = eval(`${n1} ${op} ${n2}`);
+
+                area.innerHTML = `
+                    <p>Score: ${score}/5</p>
+                    <h3 style="font-size:1.8rem; color:#00aced;">${n1} ${op} ${n2} = ?</h3>
+                    <input type="number" id="mathAns" style="padding:10px; border-radius:6px; border:1px solid #444; background:#222; color:#fff; text-align:center; font-size:1.2rem;" autofocus>
+                    <button class="play-game-btn" onclick="checkMath(${ans}, ${score})">Submit</button>
+                `;
+                document.getElementById('mathAns').onkeypress = (e) => { if (e.key === 'Enter') checkMath(ans, score); };
+            }
+            window.checkMath = (correct, currentScore) => {
+                let userAns = parseInt(document.getElementById('mathAns').value);
+                if (userAns === correct) {
+                    score++;
+                    if (score >= 5) {
+                        addXP(40);
+                        alert("🎉 Math Master! +40 XP");
+                        closeGameModal();
+                    } else {
+                        nextQuestion();
+                    }
+                } else {
+                    alert("❌ Wrong answer! Try again.");
+                }
+            };
+            nextQuestion();
+        }
+
+        // Game 5: Color Reflex
+        function initColorGame(area) {
+            let colors = ['RED', 'BLUE', 'GREEN', 'YELLOW'];
+            let colorCodes = { 'RED': '#dc3545', 'BLUE': '#00aced', 'GREEN': '#28a745', 'YELLOW': '#ffeb3b' };
+            let score = 0;
+
+            function nextRound() {
+                let txtColor = colors[Math.floor(Math.random() * colors.length)];
+                let inkColor = colors[Math.floor(Math.random() * colors.length)];
+
+                area.innerHTML = `
+                    <p>Score: ${score}/5 — Match the INK color, not the word!</p>
+                    <h2 style="font-size:2.2rem; color:${colorCodes[inkColor]}; margin:15px 0;">${txtColor}</h2>
+                    <div style="display:flex; gap:10px; justify-content:center;" id="colorBtns"></div>
+                `;
+                let btnDiv = document.getElementById('colorBtns');
+                colors.forEach(c => {
+                    let b = document.createElement('button');
+                    b.innerText = c;
+                    b.className = 'play-game-btn';
+                    b.onclick = () => {
+                        if (c === inkColor) {
+                            score++;
+                            if (score >= 5) {
+                                addXP(35);
+                                alert("🎉 Reflex Pro! +35 XP");
+                                closeGameModal();
+                            } else {
+                                nextRound();
+                            }
+                        } else {
+                            alert("❌ Wrong color!");
+                            nextRound();
+                        }
+                    };
+                    btnDiv.appendChild(b);
+                });
+            }
+            nextRound();
         }
     </script>
 </body>
